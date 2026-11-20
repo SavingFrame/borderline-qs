@@ -1,10 +1,11 @@
 import QtQuick
 import Quickshell
-import qs.Bar
 import qs.Theme
+import qs.Settings
 
 Text {
-    text: Qt.formatDateTime(clock.date, "HH:mm:ss ")
+    text: Qt.formatDateTime(clock.date, Settings.clockFormat)
+    font.pixelSize: Settings.px(14)
 
     // Qt.formatDateTime(clock.date, "ddd MMM d hh:mm:ss AP t yyyy");
     color: Theme.textPrimary

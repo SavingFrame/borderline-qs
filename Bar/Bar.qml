@@ -21,7 +21,7 @@ Scope {
             margins.top: 10
 
             implicitWidth: Math.round(modelData.width * Settings.barWidthRatio)
-            implicitHeight: Settings.barHeight
+            implicitHeight: Settings.px(Settings.barHeight)
 
             Rectangle {
                 anchors.fill: parent
@@ -31,34 +31,31 @@ Scope {
                 border.color: Qt.rgba(1, 1, 1, 0.12)
                 color: Theme.background
 
-                RowLayout {
+                Item {
                     anchors.fill: parent
                     anchors.leftMargin: 10
                     anchors.rightMargin: 10
-                    spacing: 6
 
                     RowLayout {
-                        Layout.fillWidth: true
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
                         Workspace {
                             Layout.fillWidth: true
                         }
                     }
 
                     RowLayout {
-                        Layout.fillWidth: true
+                        anchors.centerIn: parent
                         ClockWidget {
                             Layout.fillWidth: true
-                            // Layout.fillHeight: true
                         }
                     }
 
                     RowLayout {
-                        Layout.fillWidth: true
-
-                        ClockWidget {
-                            Layout.fillWidth: true
-                            // Layout.fillHeight: true
-                        }
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        Volume {}
+                        ClockWidget {}
                     }
                 }
             }
