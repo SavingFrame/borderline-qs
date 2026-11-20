@@ -8,7 +8,7 @@ Text {
     id: root
     visible: adapter != null
 
-    font.pixelSize: Settings.px(16)
+    font.pixelSize: Settings.px(Settings.iconSize)
     font.family: "Material Symbols Rounded"
     color: Theme.textPrimary
 

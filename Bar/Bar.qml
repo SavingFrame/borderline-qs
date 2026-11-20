@@ -54,6 +54,7 @@ Scope {
                     RowLayout {
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
+                        Network {}
                         Bluetooth {}
                         Volume {}
                         ClockWidget {}

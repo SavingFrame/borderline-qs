@@ -1,4 +1,3 @@
-import Quickshell
 import QtQuick
 import Quickshell.Services.Pipewire
 import qs.Settings
@@ -25,7 +24,7 @@ Text {
         }
         return sink.audio.volume;
     }
-    font.pixelSize: Settings.px(16)
+    font.pixelSize: Settings.px(Settings.iconSize)
     font.family: "Material Symbols Rounded"
     color: Theme.textPrimary
 }
