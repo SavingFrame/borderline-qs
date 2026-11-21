@@ -28,7 +28,7 @@ Scope {
 
                 radius: 12
                 border.width: 1
-                border.color: Qt.rgba(1, 1, 1, 0.12)
+                border.color: Theme.barOutline
                 color: Theme.background
 
                 Item {
