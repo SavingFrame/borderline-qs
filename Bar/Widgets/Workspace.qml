@@ -70,7 +70,6 @@ Repeater {
                     visible: modelData.lastIpcObject?.floating !== true
                     required property var modelData
 
-                    Component.onCompleted: console.log("model data", modelData)
                     Image {
                         id: appIcon
                         anchors.fill: parent
