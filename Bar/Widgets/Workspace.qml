@@ -45,7 +45,7 @@ Repeater {
                     visible: status == Image.Ready
                     source: {
                         const appId = modelData.wayland?.appId || modelData.lastIpcObject?.class || "";
-                        if (!appId) {
+                        if (!appId || DesktopEntries.applications.values.length === 0) {
                             return "";
                         }
                         const entry = DesktopEntries.byId(appId) ?? DesktopEntries.heuristicLookup(appId);
