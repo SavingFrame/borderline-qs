@@ -18,7 +18,7 @@ Repeater {
 
         border {
             width: modelData.id == Hyprland.focusedWorkspace.id ? 1 : 0
-            color: Qt.rgba(0.58, 0.77, 0.99, 0.35)
+            color: Theme.workspaceOutline
         }
         color: "transparent"
         Row {
