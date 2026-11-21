@@ -39,26 +39,70 @@ Repeater {
                     "tnum": 1
                 }
             }
+            Connections {
+                target: Hyprland
+
+                function onRawEvent(event) {
+                    if (event.name === "movewindowv2" || event.name === "activewindowv2")
+                        Hyprland.refreshToplevels();
+                }
+            }
             Repeater {
                 id: windowIcons
-                model: workspace.modelData.toplevels
-                Image {
-                    required property var modelData
+                model: {
+                    const items = Array.from(workspace.modelData.toplevels.values);
+                    return items.sort((a, b) => {
+                        const [ax, ay] = a.lastIpcObject.at ?? [Infinity, Infinity];
+                        const [bx, by] = b.lastIpcObject.at ?? [Infinity, Infinity];
+                        if (ax !== bx)
+                            return ax - bx;
+                        if (ay !== by)
+                            return ay - by;
+                        return 0;
+                    });
+                }
+                Item {
+                    id: item
+
                     width: Settings.px(19)
                     height: width
                     anchors.verticalCenter: parent.verticalCenter
-                    visible: status == Image.Ready
-                    source: {
-                        const appId = modelData.wayland?.appId || modelData.lastIpcObject?.class || "";
-                        if (!appId || DesktopEntries.applications.values.length === 0) {
-                            return "";
+                    visible: modelData.lastIpcObject?.floating !== true
+                    required property var modelData
+
+                    Component.onCompleted: console.log("model data", modelData)
+                    Image {
+                        id: appIcon
+                        anchors.fill: parent
+                        visible: status == Image.Ready
+                        source: {
+                            const appId = item.modelData.wayland?.appId || item.modelData.lastIpcObject?.class || "";
+                            if (!appId || DesktopEntries.applications.values.length === 0) {
+                                return "";
+                            }
+                            const entry = DesktopEntries.byId(appId) ?? DesktopEntries.heuristicLookup(appId);
+                            return Quickshell.iconPath(entry?.icon || appId, true);
                         }
-                        const entry = DesktopEntries.byId(appId) ?? DesktopEntries.heuristicLookup(appId);
-                        return Quickshell.iconPath(entry?.icon || appId, "application-x-executable");
+                        sourceSize: Qt.size(32, 32)
+                        fillMode: Image.PreserveAspectFit
+                        smooth: true
                     }
-                    sourceSize: Qt.size(32, 32)
-                    fillMode: Image.PreserveAspectFit
-                    smooth: true
+
+                    Rectangle {
+                        visible: appIcon.status !== Image.Ready
+                        // anchors.centerIn: parent
+                        anchors.fill: parent
+                        // implicitWidth: item.implicitWidth
+                        // implicitHeight: item.implicitHeight
+                        color: Theme.surface
+                        radius: Settings.px(4)
+                        // color: "white"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "?"
+                            color: Theme.textMuted
+                        }
+                    }
                 }
             }
         }
