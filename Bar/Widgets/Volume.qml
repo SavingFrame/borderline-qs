@@ -12,6 +12,10 @@ Row {
 
     Text {
 
+        font.pixelSize: Settings.px(Settings.iconSize)
+        font.family: "Material Symbols Rounded"
+        color: Theme.textPrimary
+        anchors.verticalCenter: parent.verticalCenter
         text: {
             const sink = Pipewire.defaultAudioSink;
             if (!sink) {
@@ -27,17 +31,19 @@ Row {
             }
             return sink.audio.volume;
         }
-        font.pixelSize: Settings.px(Settings.iconSize)
-        font.family: "Material Symbols Rounded"
-        color: Theme.textPrimary
     }
 
     Text {
+        anchors.verticalCenter: parent.verticalCenter
+        color: Theme.textPrimary
+        font.pixelSize: Settings.px(14)
+        font.family: Settings.fontFamily
+        font.features: {
+            "tnum": 1
+        }
         text: {
             const sink = Pipewire.defaultAudioSink;
             return sink ? `${Math.round(sink.audio.volume * 100)}%` : "";
         }
-        color: Theme.textPrimary
-        font.pixelSize: Settings.px(14)
     }
 }

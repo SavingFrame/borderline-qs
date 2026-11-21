@@ -33,6 +33,11 @@ Repeater {
                 text: workspace.modelData.id
                 color: Theme.textPrimary
                 font.pixelSize: Settings.px(13)
+
+                font.family: Settings.fontFamily
+                font.features: {
+                    "tnum": 1
+                }
             }
             Repeater {
                 id: windowIcons

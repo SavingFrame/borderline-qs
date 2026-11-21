@@ -11,6 +11,7 @@ Singleton {
     readonly property real barWidthRatio: 0.4
     readonly property string clockFormat: "HH:mm:ss"
     readonly property int iconSize: 16
+    readonly property string fontFamily: "Adwaita Sans"
 
     readonly property real uiScale: 1.25
 

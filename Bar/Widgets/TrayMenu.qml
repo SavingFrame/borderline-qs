@@ -82,6 +82,10 @@ PopupWindow {
                                 elide: Text.ElideRight
                                 color: row.modelData.enabled ? Theme.textPrimary : Theme.textMuted
                                 font.pixelSize: Settings.px(12)
+                                font.family: Settings.fontFamily
+                                font.features: {
+                                    "tnum": 1
+                                }
                             }
                         }
 
