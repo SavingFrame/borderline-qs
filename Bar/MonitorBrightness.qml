@@ -52,10 +52,14 @@ Scope {
     Process {
         id: ddc
         property int sent: -1 // A negative value means this command is a read.
-        environment: ({ LC_ALL: "C" })
-        stdout: StdioCollector { id: output }
+        environment: ({
+                LC_ALL: "C"
+            })
+        stdout: StdioCollector {
+            id: output
+        }
 
-        onExited: function(exitCode, exitStatus) {
+        onExited: function (exitCode, exitStatus) {
             const ok = exitCode === 0 && exitStatus === 0;
             if (ddc.sent >= 0) {
                 // Keep only the latest target. Don't retry failed writes on a loop.

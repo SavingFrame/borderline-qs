@@ -1,5 +1,6 @@
 import Quickshell
 import Quickshell.Services.Pipewire
+import Quickshell.Services.Mpris
 import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
@@ -13,6 +14,8 @@ Scope {
     property bool osd_active: false
     property string osdIcon: ""
     property int osdPercent: 0
+    property string osdMode: "progress"
+    property MprisPlayer player
 
     PwObjectTracker {
         objects: [Pipewire.defaultAudioSink]
@@ -89,6 +92,8 @@ Scope {
                     anchors.centerIn: parent
                     value: root.osdPercent
                     icon: root.osdIcon
+                    osdMode: root.osdMode
+                    player: root.player
 
                     Behavior on opacity {
                         NumberAnimation {
@@ -129,6 +134,30 @@ Scope {
         }
     }
 
+    Variants {
+        model: Mpris.players.values
+
+        Scope {
+            id: mediaSession
+            required property MprisPlayer modelData
+
+            Connections {
+                target: mediaSession.modelData?.dbusName === "org.mpris.MediaPlayer2.TelegramDesktop"
+                    ? null : mediaSession.modelData
+
+                function onPostTrackChanged() {
+                    if (target?.isPlaying)
+                        root.showMediaOverlay(target);
+                }
+
+                function onPlaybackStateChanged() {
+                    if (target && target.playbackState !== MprisPlaybackState.Stopped)
+                        root.showMediaOverlay(target);
+                }
+            }
+        }
+    }
+
     MonitorBrightness {
         id: monitorBrightness
         onPreview: level => root.showProgressOverlay("\uE1AC", level)
@@ -137,14 +166,28 @@ Scope {
     IpcHandler {
         target: "barOsd"
 
-        function brightnessUp() { monitorBrightness.adjust(1); }
-        function brightnessDown() { monitorBrightness.adjust(-1); }
-        function brightnessShow() { monitorBrightness.show(); }
+        function brightnessUp() {
+            monitorBrightness.adjust(1);
+        }
+        function brightnessDown() {
+            monitorBrightness.adjust(-1);
+        }
+        function brightnessShow() {
+            monitorBrightness.show();
+        }
     }
 
     function showProgressOverlay(icon: string, level: real) {
         root.osdIcon = icon;
         root.osdPercent = Math.round(level * 100);
+        root.osd_active = true;
+        root.osdMode = "progress";
+        osdTimer.restart();
+    }
+
+    function showMediaOverlay(player: MprisPlayer) {
+        root.player = player;
+        root.osdMode = "media";
         root.osd_active = true;
         osdTimer.restart();
     }

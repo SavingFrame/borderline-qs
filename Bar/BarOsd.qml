@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell.Services.Mpris
 import qs.Settings
 import qs.Theme
 
@@ -6,16 +7,21 @@ Item {
     id: root
     anchors.leftMargin: 10
     anchors.rightMargin: 10
-    implicitWidth: content.implicitWidth
-    implicitHeight: content.implicitHeight
+    implicitWidth: progressRow.implicitWidth
+    implicitHeight: progressRow.implicitHeight
+
+    property string osdMode: "progress"
 
     property int value: 0
     property string icon
     property real trackWidth: Settings.px(112)
+    property MprisPlayer player
 
     readonly property int percent: Math.max(0, Math.min(100, value))
+    // Progress row
     Row {
-        id: content
+        id: progressRow
+        visible: root.osdMode === "progress"
         spacing: Settings.px(10)
         Text {
             font.pixelSize: Settings.px(Settings.iconSize)
@@ -27,8 +33,6 @@ Item {
         Rectangle {
             id: track
             anchors.verticalCenter: parent.verticalCenter
-            // width: Settings.px(112)
-            // width: Settings.px(224)
             width: root.trackWidth
             height: Settings.px(5)
             radius: height / 2
@@ -55,6 +59,51 @@ Item {
             font.pixelSize: Settings.px(12)
             color: Theme.textPrimary
             text: root.percent + "%"
+        }
+    }
+
+    // Media row
+    Row {
+        id: mediaRow
+        visible: root.osdMode === "media"
+        spacing: Settings.px(10)
+
+        anchors.centerIn: parent
+
+        Image {
+            id: mediaIcon
+
+            width: Settings.px(19)
+            height: width
+            visible: status == Image.Ready
+            source: root.player?.trackArtUrl ?? ""
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+        }
+
+        Text {
+            color: Theme.textPrimary
+            font.pixelSize: Settings.px(14)
+            font.family: Settings.fontFamily
+            font.features: {
+                "tnum": 1
+            }
+            text: root.player?.trackTitle ?? ""
+        }
+
+        Text {
+
+            anchors.verticalCenter: parent.verticalCenter
+            color: Theme.textPrimary
+            font.pixelSize: Settings.px(18)
+            font.family: "Material Symbols Rounded"
+            text: {
+                if (root.player?.isPlaying) {
+                    return "\ue037";
+                } else {
+                    return "\ue034";
+                }
+            }
         }
     }
 }
