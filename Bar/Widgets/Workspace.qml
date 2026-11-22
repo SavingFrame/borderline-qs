@@ -3,7 +3,6 @@ import Quickshell.Hyprland
 import QtQuick
 import qs.Theme
 import qs.Settings
-import Quickshell.Widgets
 
 Repeater {
     id: root
@@ -20,15 +19,13 @@ Repeater {
             width: modelData.id == Hyprland.focusedWorkspace.id ? 1 : 0
             color: Theme.workspaceOutline
         }
-        color: "transparent"
+        color: workspaceMouse.containsMouse ? Theme.surface : "transparent"
         Row {
             id: workspaceContent
             anchors.centerIn: parent
             spacing: Settings.px(8)
 
             Text {
-                // text: modelData.id
-                // anchors.centerIn: parent
                 anchors.verticalCenter: parent.verticalCenter
                 text: workspace.modelData.id
                 color: Theme.textPrimary
@@ -104,6 +101,14 @@ Repeater {
                     }
                 }
             }
+        }
+
+        MouseArea {
+            id: workspaceMouse
+            anchors.fill: parent
+            onClicked: workspace.modelData.activate()
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
         }
     }
 }
