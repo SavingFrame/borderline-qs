@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import qs.Theme
 import qs.Bar.Widgets
 import qs.Settings
+import qs.BarOsd
 
 Scope {
     id: root
@@ -107,7 +108,10 @@ Scope {
     }
 
     Connections {
-        target: Pipewire.defaultAudioSink?.audio ?? null
+        target: {
+            const sink = Pipewire.defaultAudioSink;
+            return sink?.ready ? sink.audio : null;
+        }
 
         function onVolumeChanged() {
             if (target.muted) {
@@ -142,8 +146,7 @@ Scope {
             required property MprisPlayer modelData
 
             Connections {
-                target: mediaSession.modelData?.dbusName === "org.mpris.MediaPlayer2.TelegramDesktop"
-                    ? null : mediaSession.modelData
+                target: mediaSession.modelData?.dbusName === "org.mpris.MediaPlayer2.TelegramDesktop" ? null : mediaSession.modelData
 
                 function onPostTrackChanged() {
                     if (target?.isPlaying)
