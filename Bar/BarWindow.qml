@@ -20,23 +20,24 @@ PanelWindow {
 
     property bool controlCenterOpened: false
     required property BarOsdController osdController
+    readonly property real barRoundness: 1 - controlCenter.reveal
 
     Rectangle {
         anchors.fill: parent
         topLeftRadius: 12
         topRightRadius: 12
-        bottomLeftRadius: root.controlCenterOpened ? null : 12
-        bottomRightRadius: root.controlCenterOpened ? null : 12
+        bottomLeftRadius: 12 * root.barRoundness
+        bottomRightRadius: 12 * root.barRoundness
         color: Qt.tint(Theme.background, Theme.barOutline)
 
         Rectangle {
             anchors.fill: parent
             anchors.margins: 1
-            anchors.bottomMargin: root.controlCenterOpened ? 0 : 1
             color: Theme.background
             radius: 11
-            bottomLeftRadius: root.controlCenterOpened ? 0 : 11
-            bottomRightRadius: root.controlCenterOpened ? 0 : 11
+            bottomLeftRadius: 11 * root.barRoundness
+            bottomRightRadius: 11 * root.barRoundness
+            anchors.bottomMargin: root.barRoundness
 
             Item {
                 opacity: root.osdController.osd_active ? 0 : 1
@@ -116,7 +117,7 @@ PanelWindow {
         anchor.window: root
         anchor.rect.x: 0
         anchor.rect.y: root.height
-        visible: root.controlCenterOpened
+        opened: root.controlCenterOpened
     }
 
     function toggleControlCenter() {

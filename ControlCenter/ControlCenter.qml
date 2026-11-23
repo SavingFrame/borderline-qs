@@ -8,11 +8,21 @@ PopupWindow {
     id: root
     color: "transparent"
 
+    property bool opened: false
+    property real reveal: opened ? 1 : 0
+    visible: opened || reveal > 0
+
     Rectangle {
         anchors.fill: parent
         bottomLeftRadius: 12
         bottomRightRadius: 12
         color: Qt.tint(Theme.background, Theme.barOutline)
+
+        opacity: root.reveal
+        enabled: root.opened
+        transform: Translate {
+            y: -12 * (1 - root.reveal)
+        }
 
         Rectangle {
             anchors.fill: parent
@@ -52,6 +62,13 @@ PopupWindow {
                     }
                 }
             }
+        }
+    }
+
+    Behavior on reveal {
+        NumberAnimation {
+            duration: 180
+            easing.type: Easing.OutCubic
         }
     }
 }
