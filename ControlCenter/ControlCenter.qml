@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Hyprland
 import QtQuick
 import qs.Settings
 import qs.Theme
@@ -6,12 +7,18 @@ import qs.Theme
 PopupWindow {
     id: root
     color: "transparent"
-    implicitHeight: Settings.px(activeTab === 0 ? 380 : 160)
+    implicitHeight: Settings.px(380)
 
     property bool opened: false
     property real reveal: opened ? 1 : 0
     visible: opened || reveal > 0
     property int activeTab: 0
+
+    HyprlandFocusGrab {
+        windows: [root]
+        active: pages.networkPage.editingPassword
+        onCleared: pages.networkPage.cancelPassword()
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -51,6 +58,8 @@ PopupWindow {
                 }
 
                 TabPages {
+                    id: pages
+                    opened: root.opened
                     anchors.top: tabStrip.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right

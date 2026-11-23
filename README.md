@@ -1,7 +1,7 @@
 
 # Borderline-qs
 
- │ Borderline-qs is a small, floating status bar for Hyprland, built with Quickshell and inspired by Apple’s Dynamic Island. I built it for my own desktop. For now, it’s just a bar.
+ │ Borderline-qs is a small, floating status bar and Control Center for Hyprland, built with Quickshell and inspired by Apple’s Dynamic Island.
 
  ### Features
 
@@ -21,6 +21,12 @@ To install material symbols rounded font:
 ```sh
 paru -S ttf-material-symbols-variable-git
 ```
+
+ ### Network controls
+
+ Click the network icon to open the Network tab. Connect or disconnect Ethernet adapters, or turn Wi-Fi on or off and join, disconnect, or forget Wi-Fi networks. The page supports joining open and WPA-Personal networks. Enterprise profiles need to be configured separately before connecting.
+
+ Network controls use Quickshell's NetworkManager backend. Connected adapters and networks show their IP addresses, gateways, and DNS servers inline. These fields use `nmcli`, usually included with NetworkManager.
 
  ### External monitor brightness
 

@@ -1,15 +1,16 @@
 import QtQuick
 import QtQuick.Layouts
-import qs.Settings
-import qs.Theme
 
 StackLayout {
+    id: root
+
+    required property bool opened
+    readonly property alias networkPage: networkPage
+
     SoundPage {}
 
-    Text {
-        text: "Network controls"
-        color: Theme.textPrimary
-        font.family: Settings.fontFamily
-        font.pixelSize: Settings.px(16)
+    NetworkPage {
+        id: networkPage
+        active: root.opened && root.currentIndex === 1
     }
 }

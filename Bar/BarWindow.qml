@@ -70,12 +70,17 @@ PanelWindow {
                     }
                     KeyboardLayout {}
                     SystemTray {}
-                    Network {}
+                    Network {
+                        TapHandler {
+                            acceptedButtons: Qt.LeftButton
+                            onTapped: root.toggleControlCenter(1)
+                        }
+                    }
                     Bluetooth {}
                     Volume {
                         TapHandler {
                             acceptedButtons: Qt.LeftButton
-                            onTapped: root.toggleControlCenter()
+                            onTapped: root.toggleControlCenter(0)
                         }
                     }
                     ClockWidget {}
@@ -121,7 +126,12 @@ PanelWindow {
         opened: root.controlCenterOpened
     }
 
-    function toggleControlCenter() {
-        root.controlCenterOpened = !root.controlCenterOpened;
+    function toggleControlCenter(tab: int): void {
+        if (root.controlCenterOpened && controlCenter.activeTab === tab) {
+            root.controlCenterOpened = false;
+        } else {
+            controlCenter.activeTab = tab;
+            root.controlCenterOpened = true;
+        }
     }
 }
