@@ -44,14 +44,6 @@ Repeater {
                     "tnum": 1
                 }
             }
-            Connections {
-                target: Hyprland
-
-                function onRawEvent(event) {
-                    if (event.name === "movewindowv2" || event.name === "activewindowv2")
-                        Hyprland.refreshToplevels();
-                }
-            }
             Repeater {
                 id: windowIcons
                 model: {

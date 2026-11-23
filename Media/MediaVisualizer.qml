@@ -1,6 +1,4 @@
-import Quickshell
 import Quickshell.Services.Mpris
-import Quickshell.Io
 import QtQuick
 import qs.Theme
 import qs.Settings
@@ -12,22 +10,28 @@ Row {
     property real traceWidth: Settings.px(82)
     property real traceHeight: Settings.px(22)
     property color traceColor: Theme.textMuted
-    property var levels: []
+    readonly property bool wantsSamples: visible && enabled && (player?.isPlaying ?? false)
+    property bool registered: false
+    property bool ready: false
 
     spacing: Settings.px(6)
 
-    Process {
-        command: ["cava", "-p", Quickshell.shellPath("extra/cava.ini")]
-        running: row.visible && (row.player?.isPlaying ?? false)
-        onExited: row.levels = []
+    function updateSubscription() {
+        if (!ready || registered === wantsSamples)
+            return;
 
-        stdout: SplitParser {
-            onRead: line => {
-                if (row.player?.isPlaying) {
-                    row.levels = line.trim().split(";").filter(value => value !== "").map(value => Math.min(1, Math.max(0, Number(value) / 100 || 0)));
-                }
-            }
-        }
+        registered = wantsSamples;
+        CavaSampler.consumerCount += registered ? 1 : -1;
+    }
+
+    onWantsSamplesChanged: updateSubscription()
+    Component.onCompleted: {
+        ready = true;
+        updateSubscription();
+    }
+    Component.onDestruction: {
+        if (registered)
+            CavaSampler.consumerCount -= 1;
     }
 
     Image {
@@ -46,7 +50,7 @@ Row {
         height: row.traceHeight
         anchors.verticalCenter: parent.verticalCenter
 
-        readonly property var levels: row.levels
+        readonly property var levels: row.wantsSamples ? CavaSampler.levels : []
         readonly property color strokeColor: row.traceColor
 
         onLevelsChanged: requestPaint()
