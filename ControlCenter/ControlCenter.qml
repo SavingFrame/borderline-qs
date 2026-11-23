@@ -2,15 +2,16 @@ import Quickshell
 import QtQuick
 import qs.Settings
 import qs.Theme
-import QtQuick.Layouts
 
 PopupWindow {
     id: root
     color: "transparent"
+    implicitHeight: Settings.px(160)
 
     property bool opened: false
     property real reveal: opened ? 1 : 0
     visible: opened || reveal > 0
+    property int activeTab: 0
 
     Rectangle {
         anchors.fill: parent
@@ -33,34 +34,23 @@ PopupWindow {
             bottomLeftRadius: 11
             bottomRightRadius: 11
 
-            RowLayout {
+            TabStrip {
+                id: tabStrip
                 anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.topMargin: Settings.px(8)
+                anchors.leftMargin: Settings.px(10)
+                activeTab: root.activeTab
+                onTabRequested: index => root.activeTab = index
+            }
 
-                Rectangle {
-                    border.width: 1
-                    border.color: Theme.barOutline
-                    color: Theme.surface
-                    Row {
-                        Text {
-
-                            font.pixelSize: Settings.px(Settings.iconSize)
-                            font.family: "Material Symbols Rounded"
-                            color: Theme.textPrimary
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "\uE050"
-                        }
-                        Text {
-                            text: "Sound"
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: Theme.textPrimary
-                            font.pixelSize: Settings.px(16)
-                            font.family: Settings.fontFamily
-                            font.features: {
-                                "tnum": 1
-                            }
-                        }
-                    }
-                }
+            TabPages {
+                anchors.top: tabStrip.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: Settings.px(10)
+                currentIndex: root.activeTab
             }
         }
     }
