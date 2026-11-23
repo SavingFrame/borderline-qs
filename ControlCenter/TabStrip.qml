@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.ControlCenter.Widgets
+import qs.Settings
 import qs.Theme
 
 Rectangle {
@@ -9,17 +10,19 @@ Rectangle {
     required property int activeTab
     signal tabRequested(int index)
 
-    color: Theme.surface
+    readonly property int inset: Settings.px(3)
+    radius: height / 2
+    color: Theme.background
     border.width: 1
     border.color: Theme.barOutline
-    implicitWidth: tabs.implicitWidth + 2
-    implicitHeight: tabs.implicitHeight + 2
+    implicitWidth: tabs.implicitWidth + 2 * inset
+    implicitHeight: tabs.implicitHeight + 2 * inset
 
     RowLayout {
         id: tabs
         anchors.fill: parent
-        anchors.margins: 1
-        spacing: 0
+        anchors.margins: root.inset
+        spacing: Settings.px(2)
 
         TabButton {
             Layout.fillHeight: true
@@ -27,12 +30,6 @@ Rectangle {
             text: "Sound"
             selected: root.activeTab === 0
             onClicked: root.tabRequested(0)
-        }
-
-        Rectangle {
-            Layout.preferredWidth: 1
-            Layout.fillHeight: true
-            color: Theme.barOutline
         }
 
         TabButton {

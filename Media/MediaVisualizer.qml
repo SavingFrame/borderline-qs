@@ -8,6 +8,10 @@ import qs.Settings
 Row {
     id: row
     property MprisPlayer player
+    property bool showArtwork: true
+    property real traceWidth: Settings.px(82)
+    property real traceHeight: Settings.px(22)
+    property color traceColor: Theme.textMuted
     property var levels: []
 
     spacing: Settings.px(6)
@@ -30,20 +34,20 @@ Row {
         width: Settings.px(26)
         height: width
         anchors.verticalCenter: parent.verticalCenter
-        visible: status === Image.Ready
-        source: row.player?.trackArtUrl ?? ""
+        visible: row.showArtwork && status === Image.Ready
+        source: row.showArtwork ? (row.player?.trackArtUrl ?? "") : ""
         fillMode: Image.PreserveAspectFit
         smooth: true
     }
 
     Canvas {
         id: trace
-        width: Settings.px(82)
-        height: Settings.px(22)
+        width: row.traceWidth
+        height: row.traceHeight
         anchors.verticalCenter: parent.verticalCenter
 
         readonly property var levels: row.levels
-        readonly property color strokeColor: Theme.textMuted
+        readonly property color strokeColor: row.traceColor
 
         onLevelsChanged: requestPaint()
         onStrokeColorChanged: requestPaint()

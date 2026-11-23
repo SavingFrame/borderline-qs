@@ -4,16 +4,19 @@ import qs.Theme
 
 Rectangle {
     id: root
-    color: selected ? Theme.surfaceHover : "transparent"
+    radius: height / 2
+    color: selected || hover.hovered ? Theme.surfaceHover : "transparent"
 
-    implicitWidth: content.implicitWidth + Settings.px(24)
-    implicitHeight: Math.max(Settings.px(32), content.implicitHeight + Settings.px(8))
+    implicitWidth: content.implicitWidth + Settings.px(22)
+    implicitHeight: Math.max(Settings.px(28), content.implicitHeight + Settings.px(8))
 
     property bool selected: false
     signal clicked
 
     required property string icon
     required property string text
+
+    HoverHandler { id: hover }
 
     TapHandler {
         onTapped: root.clicked()
@@ -36,7 +39,7 @@ Rectangle {
             text: root.text
             anchors.verticalCenter: parent.verticalCenter
             color: Theme.textPrimary
-            font.pixelSize: Settings.px(16)
+            font.pixelSize: Settings.px(14)
             font.family: Settings.fontFamily
             font.features: {
                 "tnum": 1

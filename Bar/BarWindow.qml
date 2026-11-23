@@ -6,6 +6,7 @@ import qs.Bar.Widgets
 import qs.Settings
 import qs.BarOsd
 import qs.ControlCenter
+import qs.Media
 
 PanelWindow {
     id: root

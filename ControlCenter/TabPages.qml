@@ -4,12 +4,7 @@ import qs.Settings
 import qs.Theme
 
 StackLayout {
-    Text {
-        text: "Sound controls"
-        color: Theme.textPrimary
-        font.family: Settings.fontFamily
-        font.pixelSize: Settings.px(16)
-    }
+    SoundPage {}
 
     Text {
         text: "Network controls"

@@ -6,7 +6,7 @@ import qs.Theme
 PopupWindow {
     id: root
     color: "transparent"
-    implicitHeight: Settings.px(160)
+    implicitHeight: Settings.px(activeTab === 0 ? 380 : 160)
 
     property bool opened: false
     property real reveal: opened ? 1 : 0
@@ -34,23 +34,30 @@ PopupWindow {
             bottomLeftRadius: 11
             bottomRightRadius: 11
 
-            TabStrip {
-                id: tabStrip
+            Item {
+                width: Math.min(Settings.px(1040), Math.max(0, parent.width - Settings.px(24)))
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.topMargin: Settings.px(8)
-                anchors.leftMargin: Settings.px(10)
-                activeTab: root.activeTab
-                onTabRequested: index => root.activeTab = index
-            }
-
-            TabPages {
-                anchors.top: tabStrip.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                anchors.margins: Settings.px(10)
-                currentIndex: root.activeTab
+                anchors.topMargin: Settings.px(10)
+                anchors.bottomMargin: Settings.px(12)
+
+                TabStrip {
+                    id: tabStrip
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    activeTab: root.activeTab
+                    onTabRequested: index => root.activeTab = index
+                }
+
+                TabPages {
+                    anchors.top: tabStrip.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.topMargin: Settings.px(12)
+                    currentIndex: root.activeTab
+                }
             }
         }
     }
