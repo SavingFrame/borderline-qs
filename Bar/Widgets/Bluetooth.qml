@@ -15,7 +15,7 @@ Text {
     readonly property var adapter: Bluetooth.defaultAdapter
 
     text: {
-        const enabled = adapter.enabled;
+        const enabled = adapter?.enabled;
         if (enabled) {
             return "\uE1A7";
         } else {

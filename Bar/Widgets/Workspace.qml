@@ -16,10 +16,18 @@ Repeater {
         implicitWidth: Math.max(Settings.px(22), workspaceContent.implicitWidth + Settings.px(14))
 
         border {
-            width: modelData.id == Hyprland.focusedWorkspace.id ? 1 : 0
+            width: modelData.id == Hyprland.focusedWorkspace?.id ? 1 : 0
             color: Theme.workspaceOutline
         }
-        color: workspaceMouse.containsMouse ? Theme.surface : "transparent"
+        color: {
+            if (workspace.containsMouse) {
+                return Theme.surfaceHover;
+            } else if (modelData.id === Hyprland.focusedWorkspace?.id) {
+                return Theme.surface;
+            } else {
+                return "transparent";
+            }
+        }
         Row {
             id: workspaceContent
             anchors.centerIn: parent
