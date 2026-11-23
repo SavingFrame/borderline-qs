@@ -5,6 +5,7 @@ import qs.Theme
 
 Row {
     id: root
+
     PwObjectTracker {
         objects: [Pipewire.defaultAudioSink]
     }
