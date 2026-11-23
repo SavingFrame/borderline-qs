@@ -1,23 +1,36 @@
 import Quickshell
 import Quickshell.Hyprland
 import QtQuick
+import qs.Bar
 import qs.Settings
 import qs.Theme
 
 PopupWindow {
     id: root
     color: "transparent"
-    implicitHeight: Settings.px(380)
+    implicitHeight: Settings.px(activeTab === ControlCenter.Home ? 460 : 380)
+    required property MonitorBrightness brightness
 
     property bool opened: false
     property real reveal: opened ? 1 : 0
     visible: opened || reveal > 0
-    property int activeTab: 0
+    enum Tab { Home, Sound, Network }
+    property int activeTab: ControlCenter.Home
+    signal dismissRequested()
 
     HyprlandFocusGrab {
         windows: [root]
-        active: pages.networkPage.editingPassword
-        onCleared: pages.networkPage.cancelPassword()
+        active: root.opened
+        onCleared: {
+            if (root.opened)
+                root.dismissRequested();
+        }
+    }
+
+    Shortcut {
+        sequence: "Escape"
+        enabled: root.opened
+        onActivated: root.dismissRequested()
     }
 
     Rectangle {
@@ -60,6 +73,7 @@ PopupWindow {
                 TabPages {
                     id: pages
                     opened: root.opened
+                    brightness: root.brightness
                     anchors.top: tabStrip.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right

@@ -1,16 +1,28 @@
 import QtQuick
 import QtQuick.Layouts
+import qs.Bar
 
 StackLayout {
     id: root
 
     required property bool opened
-    readonly property alias networkPage: networkPage
+    required property MonitorBrightness brightness
 
-    SoundPage {}
+    property string selectedPlayerName: ""
+
+    HomePage {
+        active: root.opened && root.currentIndex === ControlCenter.Home
+        brightness: root.brightness
+        selectedPlayerName: root.selectedPlayerName
+        onPlayerRequested: name => root.selectedPlayerName = name
+    }
+
+    SoundPage {
+        selectedPlayerName: root.selectedPlayerName
+        onPlayerRequested: name => root.selectedPlayerName = name
+    }
 
     NetworkPage {
-        id: networkPage
-        active: root.opened && root.currentIndex === 1
+        active: root.opened && root.currentIndex === ControlCenter.Network
     }
 }

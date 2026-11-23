@@ -10,7 +10,8 @@ import qs.Theme
 Rectangle {
     id: root
 
-    property string selectedPlayerName: ""
+    required property string selectedPlayerName
+    signal playerRequested(string name)
     readonly property int inset: Settings.px(14)
     readonly property list<MprisPlayer> players: Mpris.players.values
     readonly property int selectedPlayerIndex: players.findIndex(player => player.dbusName === selectedPlayerName)
@@ -58,7 +59,7 @@ Rectangle {
                 currentIndex: root.selectedPlayerIndex + 1
                 enabled: root.players.length > 0
                 Accessible.name: "Media player"
-                onActivated: index => root.selectedPlayerName = index > 0 ? root.players[index - 1]?.dbusName ?? "" : ""
+                onActivated: index => root.playerRequested(index > 0 ? root.players[index - 1]?.dbusName ?? "" : "")
             }
         }
 

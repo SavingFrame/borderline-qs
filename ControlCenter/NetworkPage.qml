@@ -14,7 +14,6 @@ Flickable {
     required property bool active
     readonly property bool available: Networking.backend === NetworkBackendType.NetworkManager
     readonly property list<WiredDevice> ethernetDevices: Networking.devices.values.filter(device => device.type === DeviceType.Wired)
-    readonly property alias editingPassword: wifi.editingPassword
     property string errorMessage: ""
 
     clip: true
@@ -29,10 +28,6 @@ Flickable {
             errorMessage = "";
             contentY = 0;
         }
-    }
-
-    function cancelPassword(): void {
-        wifi.cancelPassword();
     }
 
     function revealItem(item: Item): void {

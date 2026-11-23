@@ -70,7 +70,6 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.leftMargin: Settings.px(36)
         visible: wifiRow.editing
-        Keys.onEscapePressed: wifiRow.section.cancelPassword()
         onVisibleChanged: if (visible) Qt.callLater(wifiRow.focusPassword)
         Component.onCompleted: if (visible) Qt.callLater(wifiRow.focusPassword)
 

@@ -26,18 +26,26 @@ Rectangle {
 
         TabButton {
             Layout.fillHeight: true
+            icon: "\uE88A"
+            text: "Home"
+            selected: root.activeTab === ControlCenter.Home
+            onClicked: root.tabRequested(ControlCenter.Home)
+        }
+
+        TabButton {
+            Layout.fillHeight: true
             icon: "\uE050"
             text: "Sound"
-            selected: root.activeTab === 0
-            onClicked: root.tabRequested(0)
+            selected: root.activeTab === ControlCenter.Sound
+            onClicked: root.tabRequested(ControlCenter.Sound)
         }
 
         TabButton {
             Layout.fillHeight: true
             icon: "\uE1BA"
             text: "Network"
-            selected: root.activeTab === 1
-            onClicked: root.tabRequested(1)
+            selected: root.activeTab === ControlCenter.Network
+            onClicked: root.tabRequested(ControlCenter.Network)
         }
     }
 }

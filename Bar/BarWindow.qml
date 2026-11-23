@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
 import qs.Theme
@@ -22,6 +23,11 @@ PanelWindow {
     property bool controlCenterOpened: false
     required property BarOsdController osdController
     readonly property real barRoundness: 1 - controlCenter.reveal
+
+    IdleInhibitor {
+        window: root
+        enabled: QuickSettings.caffeine
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -59,6 +65,11 @@ PanelWindow {
                     anchors.centerIn: parent
                     ClockWidget {
                         Layout.fillWidth: true
+
+                        TapHandler {
+                            acceptedButtons: Qt.LeftButton
+                            onTapped: root.toggleControlCenter(ControlCenter.Home)
+                        }
                     }
                 }
 
@@ -73,14 +84,14 @@ PanelWindow {
                     Network {
                         TapHandler {
                             acceptedButtons: Qt.LeftButton
-                            onTapped: root.toggleControlCenter(1)
+                            onTapped: root.toggleControlCenter(ControlCenter.Network)
                         }
                     }
                     Bluetooth {}
                     Volume {
                         TapHandler {
                             acceptedButtons: Qt.LeftButton
-                            onTapped: root.toggleControlCenter(0)
+                            onTapped: root.toggleControlCenter(ControlCenter.Sound)
                         }
                     }
                     ClockWidget {}
@@ -124,6 +135,8 @@ PanelWindow {
         anchor.rect.x: 0
         anchor.rect.y: root.height
         opened: root.controlCenterOpened
+        brightness: root.osdController.brightness
+        onDismissRequested: root.controlCenterOpened = false
     }
 
     function toggleControlCenter(tab: int): void {

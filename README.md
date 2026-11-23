@@ -22,6 +22,12 @@ To install material symbols rounded font:
 paru -S ttf-material-symbols-variable-git
 ```
 
+ ### Control Center Home
+
+ Click the center clock to open Home. Press Esc or click outside the Control Center to close it. It shows your username, hostname, system uptime, Hyprland version, local date and time, and the same Now Playing controls as the Sound tab. The volume and network icons still open their respective tabs directly.
+
+ Home also has output volume and mute, a DDC/CI brightness slider, and quick toggles for Wi-Fi, Bluetooth, Caffeine, Night Light, and Do Not Disturb. The power button cycles through the available power profiles. Caffeine inhibits Wayland idle while the bar is running. Night Light requires a running `hyprsunset`; Do Not Disturb uses Noctalia v5 notification IPC. Power profiles require `power-profiles-daemon` and `powerprofilesctl`. Controls are disabled when their backend is unavailable.
+
  ### Network controls
 
  Click the network icon to open the Network tab. Connect or disconnect Ethernet adapters, or turn Wi-Fi on or off and join, disconnect, or forget Wi-Fi networks. The page supports joining open and WPA-Personal networks. Enterprise profiles need to be configured separately before connecting.

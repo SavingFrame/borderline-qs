@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import Quickshell.Services.Pipewire
 import qs.Settings
@@ -37,48 +36,19 @@ RowLayout {
         elide: Text.ElideRight
     }
 
-    Slider {
-        id: level
+    LevelSlider {
         Layout.fillWidth: true
         Layout.minimumWidth: Settings.px(32)
         Layout.preferredWidth: Settings.px(168)
         Layout.maximumWidth: Settings.px(180)
         enabled: root.audio !== null
-        from: 0
-        to: 1
+        muted: root.audio?.muted ?? false
         value: root.audio?.volume ?? 0
         onMoved: {
             if (root.audio)
                 root.audio.volume = value;
         }
         Accessible.name: root.title + " volume"
-
-        background: Rectangle {
-            x: level.leftPadding
-            y: level.topPadding + (level.availableHeight - height) / 2
-            width: level.availableWidth
-            height: Settings.px(4)
-            radius: height / 2
-            color: Theme.border
-
-            Rectangle {
-                width: parent.width * level.visualPosition
-                height: parent.height
-                radius: parent.radius
-                color: root.audio?.muted ? Theme.textMuted : Theme.accent
-            }
-        }
-
-        handle: Rectangle {
-            implicitWidth: Settings.px(9)
-            implicitHeight: implicitWidth
-            x: level.leftPadding + level.visualPosition * (level.availableWidth - width)
-            y: level.topPadding + (level.availableHeight - height) / 2
-            radius: width / 2
-            color: level.enabled && !root.audio?.muted ? Theme.accent : Theme.textMuted
-            border.width: level.activeFocus ? 1 : 0
-            border.color: Theme.textPrimary
-        }
     }
 
     Text {

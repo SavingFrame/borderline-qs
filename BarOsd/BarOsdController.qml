@@ -17,6 +17,7 @@ Scope {
     property int osdPercent: 0
     property string osdMode: "progress"
     property MprisPlayer player
+    readonly property alias brightness: monitorBrightness
     Connections {
         target: {
             const sink = Pipewire.defaultAudioSink;

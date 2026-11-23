@@ -8,6 +8,9 @@ import qs.Settings
 Flickable {
     id: root
 
+    required property string selectedPlayerName
+    signal playerRequested(string name)
+
     clip: true
     contentWidth: width
     contentHeight: sections.y + sections.implicitHeight
@@ -27,6 +30,8 @@ Flickable {
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
             Layout.preferredWidth: Settings.px(445)
+            selectedPlayerName: root.selectedPlayerName
+            onPlayerRequested: name => root.playerRequested(name)
         }
 
         AudioMixer {

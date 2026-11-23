@@ -13,6 +13,27 @@ Scope {
     property int pendingSteps: 0
     property bool needsWrite: false
     property bool showRequested: false
+    property bool readRequested: false
+    property bool available: false
+    readonly property real level: maximum > 0 ? desired / maximum : 0
+
+    function setLevel(level: real) {
+        if (!available)
+            return;
+        const target = Math.round(Math.max(0, Math.min(1, level)) * maximum);
+        if (target === desired)
+            return;
+        desired = target;
+        needsWrite = true;
+        Qt.callLater(pump);
+    }
+
+    function refresh() {
+        if (ddc.running && ddc.sent < 0)
+            return;
+        readRequested = true;
+        pump();
+    }
 
     function adjust(steps: int) {
         if (maximum === 0) {
@@ -41,7 +62,8 @@ Scope {
             needsWrite = false;
             ddc.sent = desired;
             ddc.exec([...command, "--noverify", "setvcp", "10", String(desired)]);
-        } else if (maximum === 0 || showRequested) {
+        } else if (maximum === 0 || showRequested || readRequested) {
+            readRequested = false;
             ddc.sent = -1;
             ddc.exec([...command, "--terse", "getvcp", "10"]);
         }
@@ -65,8 +87,10 @@ Scope {
                 // Keep only the latest target. Don't retry failed writes on a loop.
                 if (root.desired === ddc.sent)
                     root.needsWrite = false;
-                if (!ok)
+                if (!ok) {
+                    root.readRequested = true;
                     console.warn("Brightness write failed (exit", exitCode + ")");
+                }
                 Qt.callLater(root.pump);
                 return;
             }
@@ -77,11 +101,13 @@ Scope {
             root.pendingSteps = 0;
             const reading = ok && /^VCP\s+10\s+C\s+(\d+)\s+(\d+)\s*$/.exec(output.text);
             if (!reading || Number(reading[2]) === 0) {
+                root.available = false;
                 console.warn("Could not read monitor brightness (exit", exitCode + ")");
                 return;
             }
 
             root.maximum = Number(reading[2]);
+            root.available = true;
             // An adjustment made during a read takes priority over the readback.
             if (root.needsWrite) {
                 root.desired = Math.min(root.desired, root.maximum);
