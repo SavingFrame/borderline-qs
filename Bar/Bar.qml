@@ -68,6 +68,9 @@ Scope {
                     RowLayout {
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
+                        MediaVisualizer {
+                            player: root.player
+                        }
                         KeyboardLayout {}
                         SystemTray {}
                         Network {}
@@ -149,13 +152,30 @@ Scope {
                 target: mediaSession.modelData?.dbusName === "org.mpris.MediaPlayer2.TelegramDesktop" ? null : mediaSession.modelData
 
                 function onPostTrackChanged() {
+                    if (!acceptMediaPlayer(target)) {
+                        return;
+                    }
                     if (target?.isPlaying)
                         root.showMediaOverlay(target);
                 }
 
                 function onPlaybackStateChanged() {
+                    if (!acceptMediaPlayer(target)) {
+                        return;
+                    }
                     if (target && target.playbackState !== MprisPlaybackState.Stopped)
                         root.showMediaOverlay(target);
+                }
+
+                function acceptMediaPlayer(player: MprisPlayer): bool {
+                    const players = Mpris.players.values;
+                    if (player.dbusName.startsWith("org.mpris.MediaPlayer2.chromium.instance")) {
+                        const realSpotify = players.find(p => p.dbusName === "org.mpris.MediaPlayer2.spotify");
+                        if (realSpotify && realSpotify.metadata["mpris::length"] === player.metadata["mpris::length"] && (player.trackTitle.startsWith(realSpotify.trackTitle) || player.trackTitle.startsWith("Spotify - Web Player:"))) {
+                            return false;
+                        }
+                    }
+                    return true;
                 }
             }
         }
