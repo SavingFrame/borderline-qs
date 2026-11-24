@@ -43,6 +43,7 @@ Rectangle {
                 Layout.preferredHeight: Settings.px(18)
                 source: root.appIconSource
                 fillMode: Image.PreserveAspectFit
+                asynchronous: true
             }
 
             Text {
