@@ -11,6 +11,7 @@ import qs.Bar
 import qs.ControlCenter.Widgets
 import qs.ControlCenter.Widgets.Media
 import qs.ControlCenter.Widgets.Sound
+import qs.Notifications
 import qs.Settings
 import qs.Theme
 
@@ -19,6 +20,7 @@ Flickable {
 
     required property bool active
     required property MonitorBrightness brightness
+    required property NotificationService notificationService
     required property string selectedPlayerName
     signal playerRequested(string name)
 
@@ -324,10 +326,8 @@ Flickable {
                     Layout.fillWidth: true
                     text: "DND"
                     glyph: highlighted ? "\uE7F6" : "\uE7F4"
-                    enabled: QuickSettings.dnd.available
-                    highlighted: QuickSettings.dnd.state === true
-                    unavailableHint: "Requires Noctalia v5 notification IPC"
-                    onClicked: QuickSettings.dnd.toggle()
+                    highlighted: root.notificationService.dnd
+                    onClicked: root.notificationService.toggleDnd()
                 }
 
                 QuickToggle {

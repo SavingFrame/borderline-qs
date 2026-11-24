@@ -26,7 +26,25 @@ paru -S ttf-material-symbols-variable-git
 
  Click the center clock to open Home. Press Esc or click outside the Control Center to close it. It shows your username, hostname, system uptime, Hyprland version, local date and time, and the same Now Playing controls as the Sound tab. The volume and network icons still open their respective tabs directly.
 
- Home also has output volume and mute, a DDC/CI brightness slider, and quick toggles for Wi-Fi, Bluetooth, Caffeine, Night Light, and Do Not Disturb. The power button cycles through the available power profiles. Caffeine inhibits Wayland idle while the bar is running. Night Light requires a running `hyprsunset`; Do Not Disturb uses Noctalia v5 notification IPC. Power profiles require `power-profiles-daemon` and `powerprofilesctl`. Controls are disabled when their backend is unavailable.
+ Home also has output volume and mute, a DDC/CI brightness slider, and quick toggles for Wi-Fi, Bluetooth, Caffeine, Night Light, and Do Not Disturb. The power button cycles through the available power profiles. Caffeine inhibits Wayland idle while the bar is running. Night Light requires a running `hyprsunset`. Do Not Disturb controls Borderline’s notification toasts. Power profiles require `power-profiles-daemon` and `powerprofilesctl`. Controls are disabled when their backend is unavailable.
+
+ ### Notifications
+
+ Click the bell to open the live inbox. App groups show their newest notification first. Click its message or **Show more** to reveal older messages, or **Show less** to collapse the stack. **Clear group** appears when the stack is expanded. Attached images appear as thumbnails alongside the message. Up to three toasts appear on the focused monitor when a stack starts. Toasts stay visible for seven seconds by default, or use the app’s requested timeout. Hover a toast to pause its timer. Right-click it to hide the popup without clearing the inbox card. Do Not Disturb hides toasts without clearing or blocking the inbox, and the setting survives a restart. Notifications themselves do not. Borderline needs exclusive ownership of `org.freedesktop.Notifications` to receive them; stop or disable your other notification daemon before launching it.
+
+ To try the inbox with sample cards without taking over the notification bus:
+
+ ```sh
+ BORDERLINE_NOTIFICATIONS_PREVIEW=1 qs -p .
+ ```
+
+ Notification sounds are off by default. Open the gear menu in the Notifications tab and use **Sound: Off** to enable them or **Test sound** to preview the built-in chime. Playback requires `canberra-gtk-play` (provided by `libcanberra` on Arch). New toasts use the app’s local sound file or sound-theme event when available, otherwise the built-in chime. DND and the `suppress-sound` hint silence automatic playback. Explicit sound tests bypass those settings.
+
+ Open Notifications and click **Test toast** to try a sample. DND changes in preview mode do not overwrite the live setting.
+
+ To toggle DND from a keybinding, use `qs -p /path/to/borderline-qs ipc call notifications toggleDnd` (or target your usual Quickshell config).
+
+ See [the notification plan](docs/notifications-plan.md) for upcoming work.
 
  ### Calendar
 

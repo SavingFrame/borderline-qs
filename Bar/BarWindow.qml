@@ -8,6 +8,7 @@ import qs.Settings
 import qs.BarOsd
 import qs.ControlCenter
 import qs.Media
+import qs.Notifications
 
 PanelWindow {
     id: root
@@ -22,6 +23,7 @@ PanelWindow {
 
     property bool controlCenterOpened: false
     required property BarOsdController osdController
+    required property NotificationService notificationService
     readonly property real barRoundness: 1 - controlCenter.reveal
 
     IdleInhibitor {
@@ -99,6 +101,35 @@ PanelWindow {
                             onTapped: root.toggleControlCenter(ControlCenter.Sound)
                         }
                     }
+                    Row {
+                        spacing: 2
+                        Accessible.role: Accessible.Button
+                        Accessible.name: "Notifications (" + root.notificationService.count + ")"
+                        Accessible.onPressAction: root.toggleControlCenter(ControlCenter.Notifications)
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: root.notificationService.dnd ? "\uE7F6" : "\uE7F4"
+                            color: Theme.textPrimary
+                            font.family: "Material Symbols Rounded"
+                            font.pixelSize: Settings.px(Settings.iconSize)
+                        }
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: root.notificationService.count > 0
+                            text: root.notificationService.count > 99 ? "99+" : String(root.notificationService.count)
+                            color: Theme.textPrimary
+                            font.family: Settings.fontFamily
+                            font.pixelSize: Settings.px(14)
+                            font.features: { "tnum": 1 }
+                        }
+
+                        TapHandler {
+                            acceptedButtons: Qt.LeftButton
+                            onTapped: root.toggleControlCenter(ControlCenter.Notifications)
+                        }
+                    }
                     ClockWidget {
                         showDate: true
 
@@ -152,6 +183,7 @@ PanelWindow {
         anchor.rect.y: root.height
         opened: root.controlCenterOpened
         brightness: root.osdController.brightness
+        notificationService: root.notificationService
         onDismissRequested: root.controlCenterOpened = false
     }
 

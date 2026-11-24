@@ -12,7 +12,8 @@ Rectangle {
 
     readonly property int inset: Settings.px(3)
     readonly property real labeledWidth: home.labeledWidth + sound.labeledWidth + network.labeledWidth
-        + bluetooth.labeledWidth + calendar.labeledWidth + 4 * tabs.spacing + 2 * inset
+        + bluetooth.labeledWidth + calendar.labeledWidth + notifications.labeledWidth
+        + 5 * tabs.spacing + 2 * inset
     radius: height / 2
     color: Theme.background
     border.width: 1
@@ -69,6 +70,14 @@ Rectangle {
             text: "Calendar"
             selected: root.activeTab === ControlCenter.Calendar
             onClicked: root.tabRequested(ControlCenter.Calendar)
+        }
+
+        StripButton {
+            id: notifications
+            icon: "\uE7F4"
+            text: "Notifications"
+            selected: root.activeTab === ControlCenter.Notifications
+            onClicked: root.tabRequested(ControlCenter.Notifications)
         }
     }
 }

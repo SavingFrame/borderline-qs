@@ -2,9 +2,12 @@ import Quickshell
 import Quickshell.Hyprland
 import QtQuick
 import qs.BarOsd
+import qs.Notifications
 
 Scope {
     id: root
+
+    required property NotificationService notificationService
 
     function refreshWorkspaceWindows() {
         Hyprland.refreshToplevels();
@@ -27,6 +30,7 @@ Scope {
         model: Quickshell.screens
         BarWindow {
             osdController: barOsdController
+            notificationService: root.notificationService
         }
     }
 }

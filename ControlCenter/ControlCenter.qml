@@ -4,6 +4,7 @@ import QtQuick
 import qs.Bar
 import qs.Settings
 import qs.Theme
+import qs.Notifications
 
 PopupWindow {
     id: root
@@ -11,11 +12,12 @@ PopupWindow {
     implicitHeight: Settings.px(activeTab === ControlCenter.Calendar ? 576
         : activeTab === ControlCenter.Home ? 460 : 380)
     required property MonitorBrightness brightness
+    required property NotificationService notificationService
 
     property bool opened: false
     property real reveal: opened ? 1 : 0
     visible: opened || reveal > 0
-    enum Tab { Home, Sound, Network, Bluetooth, Calendar }
+    enum Tab { Home, Sound, Network, Bluetooth, Calendar, Notifications }
     property int activeTab: ControlCenter.Home
     signal dismissRequested()
 
@@ -75,6 +77,7 @@ PopupWindow {
                     id: pages
                     opened: root.opened
                     brightness: root.brightness
+                    notificationService: root.notificationService
                     anchors.top: tabStrip.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right

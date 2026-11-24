@@ -9,12 +9,10 @@ Singleton {
 
     property bool caffeine: false
     readonly property alias nightLight: nightLight
-    readonly property alias dnd: dnd
     readonly property bool powerAvailable: power.available
 
     function refresh() {
         nightLight.refresh();
-        dnd.refresh();
         power.refresh();
     }
 
@@ -58,13 +56,6 @@ Singleton {
         query: ["hyprctl", "hyprsunset", "temperature"]
         decode: value => /^\d+$/.test(value) ? Number(value) < 6500 : null
         change: enabled => enabled ? ["hyprctl", "hyprsunset", "temperature", "4000"] : ["hyprctl", "hyprsunset", "identity"]
-    }
-
-    CommandSetting {
-        id: dnd
-        query: ["noctalia", "msg", "notification-dnd-status"]
-        decode: value => value === "on" ? true : value === "off" ? false : null
-        change: enabled => ["noctalia", "msg", "notification-dnd-set", enabled ? "on" : "off"]
     }
 
     CommandSetting {

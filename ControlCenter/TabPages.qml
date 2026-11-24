@@ -1,12 +1,14 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Bar
+import qs.Notifications
 
 StackLayout {
     id: root
 
     required property bool opened
     required property MonitorBrightness brightness
+    required property NotificationService notificationService
 
     property string selectedPlayerName: ""
     signal dismissRequested()
@@ -14,6 +16,7 @@ StackLayout {
     HomePage {
         active: root.opened && root.currentIndex === ControlCenter.Home
         brightness: root.brightness
+        notificationService: root.notificationService
         selectedPlayerName: root.selectedPlayerName
         onPlayerRequested: name => root.selectedPlayerName = name
     }
@@ -34,5 +37,9 @@ StackLayout {
 
     CalendarPage {
         active: root.opened && root.currentIndex === ControlCenter.Calendar
+    }
+
+    NotificationsPage {
+        service: root.notificationService
     }
 }
