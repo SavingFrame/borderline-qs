@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Notifications
+import qs.Settings
 
 Scope {
     id: root
@@ -96,7 +97,7 @@ Scope {
 
     function enqueueToast(notification): void {
         const ids = toasts.map(item => item.id);
-        if (ids.includes(notification.id) || ids.length >= 3 || dnd)
+        if (ids.includes(notification.id) || ids.length >= Settings.notificationMaxToasts || dnd)
             return;
         if (ids.length === 0)
             toastScreenName = Hyprland.focusedMonitor?.name ?? "";
@@ -183,7 +184,7 @@ Scope {
             extraHints: ["value", "sound-file", "sound-name", "suppress-sound"]
 
             onNotification: notification => {
-                const showToast = !root.dnd && !notification.lastGeneration && root.toasts.length < 3;
+                const showToast = !root.dnd && !notification.lastGeneration && root.toasts.length < Settings.notificationMaxToasts;
                 if (!notification.transient || showToast)
                     notification.tracked = true;
                 if (showToast)

@@ -1,11 +1,12 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import qs.Settings
 
 Scope {
     id: root
 
-    property string monitorSerial: Quickshell.env("DDC_MONITOR_SERIAL") ?? ""
+    property string monitorSerial: Quickshell.env("DDC_MONITOR_SERIAL") ?? Settings.brightnessMonitorSerial
     signal preview(real level)
 
     property int maximum: 0
@@ -39,7 +40,7 @@ Scope {
         if (maximum === 0) {
             pendingSteps += steps;
         } else {
-            const step = Math.max(1, Math.round(maximum * 0.05));
+            const step = Math.max(1, Math.round(maximum * Settings.brightnessStepPercent / 100));
             desired = Math.max(0, Math.min(maximum, desired + steps * step));
             needsWrite = true;
             preview(desired / maximum);

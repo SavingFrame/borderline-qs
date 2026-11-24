@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.Settings
 
 Singleton {
     id: root
@@ -55,7 +56,7 @@ Singleton {
         id: nightLight
         query: ["hyprctl", "hyprsunset", "temperature"]
         decode: value => /^\d+$/.test(value) ? Number(value) < 6500 : null
-        change: enabled => enabled ? ["hyprctl", "hyprsunset", "temperature", "4000"] : ["hyprctl", "hyprsunset", "identity"]
+        change: enabled => enabled ? ["hyprctl", "hyprsunset", "temperature", String(Settings.nightLightTemperatureK)] : ["hyprctl", "hyprsunset", "identity"]
     }
 
     CommandSetting {

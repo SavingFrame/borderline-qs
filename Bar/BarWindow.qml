@@ -16,7 +16,7 @@ PanelWindow {
     required property var modelData
     screen: modelData
     anchors.top: true
-    margins.top: 10
+    margins.top: Settings.barTopMargin
 
     implicitWidth: Math.round(modelData.width * Settings.barWidthRatio)
     implicitHeight: Settings.px(Settings.barHeight)
@@ -33,19 +33,19 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        topLeftRadius: 12
-        topRightRadius: 12
-        bottomLeftRadius: 12 * root.barRoundness
-        bottomRightRadius: 12 * root.barRoundness
+        topLeftRadius: Settings.barCornerRadius
+        topRightRadius: Settings.barCornerRadius
+        bottomLeftRadius: Settings.barCornerRadius * root.barRoundness
+        bottomRightRadius: Settings.barCornerRadius * root.barRoundness
         color: Qt.tint(Theme.background, Theme.barOutline)
 
         Rectangle {
             anchors.fill: parent
             anchors.margins: 1
             color: Theme.background
-            radius: 11
-            bottomLeftRadius: 11 * root.barRoundness
-            bottomRightRadius: 11 * root.barRoundness
+            radius: Math.max(0, Settings.barCornerRadius - 1)
+            bottomLeftRadius: radius * root.barRoundness
+            bottomRightRadius: radius * root.barRoundness
             anchors.bottomMargin: root.barRoundness
 
             Item {
@@ -75,6 +75,7 @@ PanelWindow {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     MediaVisualizer {
+                        visible: Settings.barVisualizerEnabled
                         player: root.osdController.player
                     }
                     KeyboardLayout {}

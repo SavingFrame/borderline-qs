@@ -7,8 +7,8 @@ PanelWindow {
 
     required property NotificationService service
 
-    readonly property int toastWidth: Math.max(1, Math.min(Settings.px(340),
-        (service.toastScreen?.width ?? Settings.px(364)) - Settings.px(24)))
+    readonly property int toastWidth: Math.max(1, Math.min(Settings.px(Settings.notificationToastWidth),
+        (service.toastScreen?.width ?? Infinity) - Settings.px(24)))
 
     screen: service.toastScreen
     visible: service.toastScreen !== null && service.toasts.length > 0
@@ -117,7 +117,7 @@ PanelWindow {
                 }
 
                 // Quickshell 0.3.2 exposes the raw D-Bus milliseconds despite the QML docstring.
-                property int remaining: modelData?.expireTimeout > 0 ? modelData.expireTimeout : 7000
+                property int remaining: modelData?.expireTimeout > 0 ? modelData.expireTimeout : Settings.notificationToastTimeoutMs
                 property double deadline: 0
 
                 function resumeCountdown(): void {

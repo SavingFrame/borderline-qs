@@ -1,11 +1,13 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.Settings
 
 Scope {
     id: root
 
-    readonly property string defaultSound: "--file=" + Quickshell.shellDir + "/Notifications/chime.wav"
+    readonly property string fallbackSoundPath: Settings.notificationFallbackSound.startsWith("/")
+        ? Settings.notificationFallbackSound : Quickshell.shellPath(Settings.notificationFallbackSound)
     property var pending: []
     property bool testing: false
 
@@ -34,7 +36,7 @@ Scope {
             options.push("--file=" + path);
         if (typeof name === "string" && /^[a-zA-Z0-9_-]{1,128}$/.test(name))
             options.push("--id=" + name);
-        options.push(defaultSound);
+        options.push("--file=" + fallbackSoundPath);
         testing = test;
         if (!test)
             cooldown.restart();
@@ -47,7 +49,8 @@ Scope {
             return;
         const option = pending[0];
         pending = pending.slice(1);
-        player.exec(["timeout", "--kill-after=1s", "8s", "canberra-gtk-play", option]);
+        player.exec(["timeout", "--kill-after=1s", "8s", "canberra-gtk-play",
+            "--volume=" + Settings.notificationVolumeDb, option]);
     }
 
     function cancelAutomatic(): void {

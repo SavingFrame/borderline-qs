@@ -4,6 +4,7 @@ import Quickshell.Services.Mpris
 import Quickshell.Io
 import QtQuick
 import qs.Bar
+import qs.Settings
 
 Scope {
     id: root
@@ -57,7 +58,8 @@ Scope {
             required property MprisPlayer modelData
 
             Connections {
-                target: mediaSession.modelData?.dbusName === "org.mpris.MediaPlayer2.TelegramDesktop" ? null : mediaSession.modelData
+                target: Settings.mediaOsdIgnoredPlayers.includes(mediaSession.modelData?.dbusName)
+                    ? null : mediaSession.modelData
 
                 function onPostTrackChanged() {
                     if (!acceptMediaPlayer(target)) {
@@ -125,7 +127,7 @@ Scope {
 
     Timer {
         id: osdTimer
-        interval: 1200
+        interval: Settings.osdTimeoutMs
         repeat: false
         onTriggered: root.osd_active = false
     }

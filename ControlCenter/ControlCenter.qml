@@ -9,8 +9,10 @@ import qs.Notifications
 PopupWindow {
     id: root
     color: "transparent"
-    implicitHeight: Settings.px(activeTab === ControlCenter.Calendar ? 576
-        : activeTab === ControlCenter.Home ? 460 : 380)
+    implicitHeight: Settings.px(activeTab === ControlCenter.Calendar ? Settings.controlCenterCalendarHeight
+        : activeTab === ControlCenter.Home ? Settings.controlCenterHomeHeight
+        : activeTab === ControlCenter.Notifications ? Settings.controlCenterNotificationsHeight
+        : Settings.controlCenterDefaultHeight)
     required property MonitorBrightness brightness
     required property NotificationService notificationService
 
@@ -38,8 +40,8 @@ PopupWindow {
 
     Rectangle {
         anchors.fill: parent
-        bottomLeftRadius: 12
-        bottomRightRadius: 12
+        bottomLeftRadius: Settings.barCornerRadius
+        bottomRightRadius: Settings.barCornerRadius
         color: Qt.tint(Theme.background, Theme.barOutline)
 
         opacity: root.reveal
@@ -54,11 +56,11 @@ PopupWindow {
             anchors.rightMargin: 1
             anchors.bottomMargin: 1
             color: Theme.background
-            bottomLeftRadius: 11
-            bottomRightRadius: 11
+            bottomLeftRadius: Math.max(0, Settings.barCornerRadius - 1)
+            bottomRightRadius: bottomLeftRadius
 
             Item {
-                width: Math.min(Settings.px(1040), Math.max(0, parent.width - Settings.px(24)))
+                width: Math.min(Settings.px(Settings.controlCenterContentMaxWidth), Math.max(0, parent.width - Settings.px(24)))
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom

@@ -11,7 +11,7 @@ Row {
     spacing: Settings.px(Settings.barSpacing)
 
     Text {
-        text: Qt.locale().toString(clock.date, "ddd d")
+        text: Qt.locale().toString(clock.date, Settings.barDateFormat)
         font.pixelSize: Settings.px(14)
         font.family: Settings.fontFamily
         color: Theme.textMuted

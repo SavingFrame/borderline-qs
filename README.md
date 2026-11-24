@@ -75,13 +75,14 @@ paru -S ttf-material-symbols-variable-git
 
  ### External monitor brightness
 
- Install `ddcutil` and enable DDC/CI in the monitor's settings. The brightness worker defaults to `ddcutil` display 1. To target a specific monitor, set `DDC_MONITOR_SERIAL` in the environment that launches Quickshell (not in the keybind).
+ Install `ddcutil` and enable DDC/CI in the monitor's settings. The brightness worker defaults to `ddcutil` display 1. To target a specific monitor, set `brightnessMonitorSerial` in `Settings/Settings.qml`. `DDC_MONITOR_SERIAL` in Quickshell's launch environment overrides that setting.
 
  Bind `scripts/monitor-brightness up` and `scripts/monitor-brightness down` in Hyprland using the script's absolute path. The OSD shows the requested level immediately. Run `scripts/monitor-brightness show` to read the actual level and preview the OSD without changing brightness.
 
  ### Customization
 
- - Settings/Settings.qml: bar dimensions, UI scale, icon size, and clock format
- - Theme/Theme.qml: color palette
+ - `Settings/Settings.qml`: UI scale, bar geometry, clock and date formats, toast size and timing, notification volume and fallback sound, OSD, brightness, Night Light, Control Center dimensions, and Google Calendar refresh. A toast limit of zero disables popups without disabling the inbox. The media OSD ignore list uses exact MPRIS D-Bus names.
+ - `Theme/Theme.qml`: color palette.
+ - `extra/cava.ini`: visualizer sampling, including bar count and frame rate.
 
 

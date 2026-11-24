@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import qs.Settings
 
 Item {
     id: root
@@ -77,7 +78,7 @@ Item {
     }
 
     Timer {
-        interval: 300000
+        interval: Settings.googleCalendarRefreshIntervalMs
         running: root.active && root.connected
         repeat: true
         onTriggered: root.refresh()
