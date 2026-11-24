@@ -14,7 +14,7 @@ PopupWindow {
     property bool opened: false
     property real reveal: opened ? 1 : 0
     visible: opened || reveal > 0
-    enum Tab { Home, Sound, Network }
+    enum Tab { Home, Sound, Network, Bluetooth }
     property int activeTab: ControlCenter.Home
     signal dismissRequested()
 
@@ -80,6 +80,7 @@ PopupWindow {
                     anchors.bottom: parent.bottom
                     anchors.topMargin: Settings.px(12)
                     currentIndex: root.activeTab
+                    onDismissRequested: root.dismissRequested()
                 }
             }
         }

@@ -11,7 +11,14 @@ Rectangle {
     implicitHeight: Math.max(Settings.px(28), content.implicitHeight + Settings.px(8))
 
     property bool selected: false
+    property bool showLabel: true
+    readonly property real labeledWidth: glyph.implicitWidth + content.spacing + label.implicitWidth + Settings.px(22)
     signal clicked
+
+    Accessible.role: Accessible.PageTab
+    Accessible.name: root.text
+    Accessible.selected: root.selected
+    Accessible.onPressAction: root.clicked()
 
     required property string icon
     required property string text
@@ -28,7 +35,7 @@ Rectangle {
         spacing: Settings.px(6)
 
         Text {
-
+            id: glyph
             font.pixelSize: Settings.px(Settings.iconSize)
             font.family: "Material Symbols Rounded"
             color: Theme.textPrimary
@@ -36,6 +43,8 @@ Rectangle {
             text: root.icon
         }
         Text {
+            id: label
+            visible: root.showLabel
             text: root.text
             anchors.verticalCenter: parent.verticalCenter
             color: Theme.textPrimary

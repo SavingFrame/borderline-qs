@@ -11,6 +11,8 @@ Rectangle {
     signal tabRequested(int index)
 
     readonly property int inset: Settings.px(3)
+    readonly property real labeledWidth: home.labeledWidth + sound.labeledWidth + network.labeledWidth
+        + bluetooth.labeledWidth + 3 * tabs.spacing + 2 * inset
     radius: height / 2
     color: Theme.background
     border.width: 1
@@ -24,28 +26,41 @@ Rectangle {
         anchors.margins: root.inset
         spacing: Settings.px(2)
 
-        TabButton {
+        component StripButton: TabButton {
             Layout.fillHeight: true
+            showLabel: root.labeledWidth <= root.parent.width
+        }
+
+        StripButton {
+            id: home
             icon: "\uE88A"
             text: "Home"
             selected: root.activeTab === ControlCenter.Home
             onClicked: root.tabRequested(ControlCenter.Home)
         }
 
-        TabButton {
-            Layout.fillHeight: true
+        StripButton {
+            id: sound
             icon: "\uE050"
             text: "Sound"
             selected: root.activeTab === ControlCenter.Sound
             onClicked: root.tabRequested(ControlCenter.Sound)
         }
 
-        TabButton {
-            Layout.fillHeight: true
+        StripButton {
+            id: network
             icon: "\uE1BA"
             text: "Network"
             selected: root.activeTab === ControlCenter.Network
             onClicked: root.tabRequested(ControlCenter.Network)
+        }
+
+        StripButton {
+            id: bluetooth
+            icon: "\uE1A7"
+            text: "Bluetooth"
+            selected: root.activeTab === ControlCenter.Bluetooth
+            onClicked: root.tabRequested(ControlCenter.Bluetooth)
         }
     }
 }

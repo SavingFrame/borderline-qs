@@ -34,6 +34,12 @@ paru -S ttf-material-symbols-variable-git
 
  Network controls use Quickshell's NetworkManager backend. Connected adapters and networks show their IP addresses, gateways, and DNS servers inline. These fields use `nmcli`, usually included with NetworkManager.
 
+ ### Bluetooth controls
+
+ Click the Bluetooth icon to open the Bluetooth tab. Turn the default adapter on or off and connect or disconnect paired devices. **Pair new device…** opens `blueman-manager` for discovery and pairing.
+
+ On Arch, install Blueman with `sudo pacman -S blueman`. If the manager reports that its applet is not running, start `blueman-applet` in your session. Blueman is optional for the tab’s paired-device controls.
+
  ### External monitor brightness
 
  Install `ddcutil` and enable DDC/CI in the monitor's settings. The brightness worker defaults to `ddcutil` display 1. To target a specific monitor, set `DDC_MONITOR_SERIAL` in the environment that launches Quickshell (not in the keybind).

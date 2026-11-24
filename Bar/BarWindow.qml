@@ -87,7 +87,12 @@ PanelWindow {
                             onTapped: root.toggleControlCenter(ControlCenter.Network)
                         }
                     }
-                    Bluetooth {}
+                    Bluetooth {
+                        TapHandler {
+                            acceptedButtons: Qt.LeftButton
+                            onTapped: root.toggleControlCenter(ControlCenter.Bluetooth)
+                        }
+                    }
                     Volume {
                         TapHandler {
                             acceptedButtons: Qt.LeftButton

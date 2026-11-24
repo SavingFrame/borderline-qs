@@ -9,6 +9,7 @@ StackLayout {
     required property MonitorBrightness brightness
 
     property string selectedPlayerName: ""
+    signal dismissRequested()
 
     HomePage {
         active: root.opened && root.currentIndex === ControlCenter.Home
@@ -24,5 +25,10 @@ StackLayout {
 
     NetworkPage {
         active: root.opened && root.currentIndex === ControlCenter.Network
+    }
+
+    BluetoothPage {
+        active: root.opened && root.currentIndex === ControlCenter.Bluetooth
+        onDismissRequested: root.dismissRequested()
     }
 }
