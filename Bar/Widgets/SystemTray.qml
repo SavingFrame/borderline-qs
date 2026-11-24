@@ -17,6 +17,7 @@ Repeater {
         implicitWidth: trayIcon.implicitWidth
         implicitHeight: trayIcon.implicitHeight
 
+        cursorShape: Qt.PointingHandCursor
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
         onClicked: mouse => {

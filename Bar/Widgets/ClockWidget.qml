@@ -20,6 +20,10 @@ Row {
         Accessible.name: "Calendar"
         Accessible.onPressAction: root.dateTapped()
 
+        HoverHandler {
+            cursorShape: Qt.PointingHandCursor
+        }
+
         TapHandler {
             acceptedButtons: Qt.LeftButton
             onTapped: root.dateTapped()
@@ -38,6 +42,10 @@ Row {
         Accessible.role: Accessible.Button
         Accessible.name: "Home"
         Accessible.onPressAction: root.timeTapped()
+
+        HoverHandler {
+            cursorShape: Qt.PointingHandCursor
+        }
 
         TapHandler {
             acceptedButtons: Qt.LeftButton

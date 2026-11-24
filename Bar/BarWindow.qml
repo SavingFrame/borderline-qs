@@ -81,18 +81,30 @@ PanelWindow {
                     KeyboardLayout {}
                     SystemTray {}
                     Network {
+                        HoverHandler {
+                            cursorShape: Qt.PointingHandCursor
+                        }
+
                         TapHandler {
                             acceptedButtons: Qt.LeftButton
                             onTapped: root.toggleControlCenter(ControlCenter.Network)
                         }
                     }
                     Bluetooth {
+                        HoverHandler {
+                            cursorShape: Qt.PointingHandCursor
+                        }
+
                         TapHandler {
                             acceptedButtons: Qt.LeftButton
                             onTapped: root.toggleControlCenter(ControlCenter.Bluetooth)
                         }
                     }
                     Volume {
+                        HoverHandler {
+                            cursorShape: Qt.PointingHandCursor
+                        }
+
                         TapHandler {
                             acceptedButtons: Qt.LeftButton
                             onTapped: root.toggleControlCenter(ControlCenter.Sound)
@@ -120,6 +132,10 @@ PanelWindow {
                             font.family: Settings.fontFamily
                             font.pixelSize: Settings.px(14)
                             font.features: { "tnum": 1 }
+                        }
+
+                        HoverHandler {
+                            cursorShape: Qt.PointingHandCursor
                         }
 
                         TapHandler {
