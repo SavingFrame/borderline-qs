@@ -3,16 +3,29 @@ import Quickshell
 import qs.Theme
 import qs.Settings
 
-Text {
-    text: Qt.formatDateTime(clock.date, Settings.clockFormat)
-    font.pixelSize: Settings.px(14)
-    font.family: Settings.fontFamily
-    font.features: {
-        "tnum": 1
+Row {
+    id: root
+
+    property bool showDate: false
+    spacing: Settings.px(Settings.barSpacing)
+
+    Text {
+        visible: root.showDate
+        text: Qt.locale().toString(clock.date, "ddd d")
+        font.pixelSize: Settings.px(14)
+        font.family: Settings.fontFamily
+        color: Theme.textMuted
     }
 
-    // Qt.formatDateTime(clock.date, "ddd MMM d hh:mm:ss AP t yyyy");
-    color: Theme.textPrimary
+    Text {
+        text: Qt.formatDateTime(clock.date, Settings.clockFormat)
+        font.pixelSize: Settings.px(14)
+        font.family: Settings.fontFamily
+        font.features: {
+            "tnum": 1
+        }
+        color: Theme.textPrimary
+    }
 
     SystemClock {
         id: clock

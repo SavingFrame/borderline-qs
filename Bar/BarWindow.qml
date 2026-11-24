@@ -99,7 +99,9 @@ PanelWindow {
                             onTapped: root.toggleControlCenter(ControlCenter.Sound)
                         }
                     }
-                    ClockWidget {}
+                    ClockWidget {
+                        showDate: true
+                    }
                 }
 
                 Behavior on opacity {
