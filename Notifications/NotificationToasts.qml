@@ -16,12 +16,12 @@ PanelWindow {
     anchors.top: true
     anchors.right: true
     margins.top: Settings.px(12)
-    margins.right: Settings.px(12)
     exclusionMode: ExclusionMode.Normal
     exclusiveZone: 0
     focusable: false
-    implicitWidth: toastWidth
+    implicitWidth: toastWidth + Settings.px(12)
     implicitHeight: Math.max(1, stack.implicitHeight)
+    mask: Region { item: stack }
 
     Column {
         id: stack
@@ -44,11 +44,76 @@ PanelWindow {
                 width: stack.width
                 notification: modelData
                 compact: true
-                onDismissRequested: root.service.dismiss(notification)
+                onDismissRequested: slideOut(true)
+
+                property bool leaving: false
+                property bool dismissAfterSlide: false
+
+                function slideOut(dismiss): void {
+                    if (leaving)
+                        return;
+                    leaving = true;
+                    dismissAfterSlide = dismiss;
+                    timer.stop();
+                    snapBack.stop();
+                    slide.start();
+                }
+
+                transform: Translate { id: offset }
+
+                NumberAnimation {
+                    id: slide
+                    target: offset
+                    property: "x"
+                    to: root.implicitWidth
+                    duration: 200
+                    easing.type: Easing.InCubic
+                    onFinished: {
+                        if (toast.dismissAfterSlide)
+                            root.service.dismiss(toast.notification);
+                        else
+                            root.service.hideToast(toast.notification);
+                    }
+                }
+
+                NumberAnimation {
+                    id: snapBack
+                    target: offset
+                    property: "x"
+                    to: 0
+                    duration: 160
+                    easing.type: Easing.OutCubic
+                }
 
                 TapHandler {
                     acceptedButtons: Qt.RightButton
-                    onTapped: root.service.hideToast(toast.notification)
+                    onTapped: toast.slideOut(false)
+                }
+
+                DragHandler {
+                    id: drag
+                    target: null
+                    enabled: !toast.leaving
+                    acceptedButtons: Qt.LeftButton
+                    yAxis.enabled: false
+                    onTranslationChanged: {
+                        if (active)
+                            offset.x = Math.max(0, activeTranslation.x);
+                    }
+                    onActiveChanged: {
+                        if (active) {
+                            snapBack.stop();
+                            toast.pauseCountdown();
+                        } else if (!toast.leaving) {
+                            if (offset.x >= Settings.px(48)) {
+                                toast.slideOut(false);
+                            } else {
+                                snapBack.restart();
+                                if (!pointer.hovered)
+                                    toast.resumeCountdown();
+                            }
+                        }
+                    }
                 }
 
                 // Quickshell 0.3.2 exposes the raw D-Bus milliseconds despite the QML docstring.
@@ -60,6 +125,13 @@ PanelWindow {
                     timer.start();
                 }
 
+                function pauseCountdown(): void {
+                    if (!timer.running)
+                        return;
+                    timer.stop();
+                    remaining = Math.max(1, deadline - Date.now());
+                }
+
                 Component.onCompleted: {
                     if (!pointer.hovered)
                         resumeCountdown();
@@ -68,18 +140,18 @@ PanelWindow {
                 Timer {
                     id: timer
                     interval: toast.remaining
-                    onTriggered: root.service.hideToast(toast.notification)
+                    onTriggered: toast.slideOut(false)
                 }
 
                 HoverHandler {
                     id: pointer
                     onHoveredChanged: {
-                        if (hovered && timer.running) {
-                            timer.stop();
-                            toast.remaining = Math.max(1, toast.deadline - Date.now());
-                        } else if (!hovered && !timer.running) {
+                        if (toast.leaving || drag.active)
+                            return;
+                        if (hovered)
+                            toast.pauseCountdown();
+                        else if (!timer.running)
                             toast.resumeCountdown();
-                        }
                     }
                 }
             }
