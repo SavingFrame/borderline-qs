@@ -48,7 +48,7 @@ paru -S ttf-material-symbols-variable-git
 
  ### Calendar
 
- Click the date or time on the right side of the bar to open the Calendar tab. Use the arrows to browse months and **Today** to jump back to the current month. Today is highlighted, and dates from adjacent months are dimmed.
+ Click the date next to the center clock to open the Calendar tab. Use the arrows to browse months and **Today** to jump back to the current month. Today is highlighted, and dates from adjacent months are dimmed.
 
  #### Google Calendar (optional)
 

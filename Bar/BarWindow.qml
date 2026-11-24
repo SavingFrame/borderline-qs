@@ -66,12 +66,8 @@ PanelWindow {
                 RowLayout {
                     anchors.centerIn: parent
                     ClockWidget {
-                        Layout.fillWidth: true
-
-                        TapHandler {
-                            acceptedButtons: Qt.LeftButton
-                            onTapped: root.toggleControlCenter(ControlCenter.Home)
-                        }
+                        onDateTapped: root.toggleControlCenter(ControlCenter.Calendar)
+                        onTimeTapped: root.toggleControlCenter(ControlCenter.Home)
                     }
                 }
 
@@ -128,18 +124,6 @@ PanelWindow {
                         TapHandler {
                             acceptedButtons: Qt.LeftButton
                             onTapped: root.toggleControlCenter(ControlCenter.Notifications)
-                        }
-                    }
-                    ClockWidget {
-                        showDate: true
-
-                        Accessible.role: Accessible.Button
-                        Accessible.name: "Calendar"
-                        Accessible.onPressAction: root.toggleControlCenter(ControlCenter.Calendar)
-
-                        TapHandler {
-                            acceptedButtons: Qt.LeftButton
-                            onTapped: root.toggleControlCenter(ControlCenter.Calendar)
                         }
                     }
                 }
