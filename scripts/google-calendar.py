@@ -165,7 +165,7 @@ def epoch_ms(value):
 
 def calendar_list(token):
     return list(pages(API + "/users/me/calendarList", token, minAccessRole="reader",
-                      fields="nextPageToken,items(id,summary,summaryOverride,selected,primary)"))
+                      fields="nextPageToken,items(id,summary,summaryOverride,selected,primary,backgroundColor)"))
 
 
 def primary_id(calendars):
@@ -201,6 +201,7 @@ def events(token, first, following, calendars, seen):
             all_day = "date" in start
             output.append(dict(title=item.get("summary") or "Untitled event",
                                calendar=calendar.get("summaryOverride") or calendar.get("summary", ""),
+                               color=calendar.get("backgroundColor", ""),
                                allDay=all_day,
                                start=start["date"] if all_day else epoch_ms(start["dateTime"]),
                                end=end["date"] if all_day else epoch_ms(end["dateTime"])))

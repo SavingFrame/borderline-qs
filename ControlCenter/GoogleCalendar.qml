@@ -11,24 +11,11 @@ Item {
     readonly property bool busy: worker.running
     readonly property bool connecting: busy && worker.action === "connect"
     readonly property bool hasEventsForMonth: cache[focusMonth] !== undefined
-    readonly property var agendaRange: {
-        if (!hasEventsForMonth)
-            return null;
-        let first = focusMonth;
-        let last = focusMonth;
-        while (cache[first - 1] !== undefined)
-            --first;
-        while (cache[last + 1] !== undefined)
-            ++last;
-        return { first: monthDate(first), end: monthDate(last + 1) };
-    }
     property var cache: ({})
     property bool configured: false
     property var accounts: []
     readonly property bool connected: accounts.length > 0
     property string error: ""
-
-    signal eventsAboutToChange()
 
     function monthNumber(day: date): int {
         return day.getFullYear() * 12 + day.getMonth();
@@ -60,13 +47,6 @@ Item {
         if (action === "disconnect")
             command.push("--account=" + account);
         worker.exec(command);
-    }
-
-    function extend(direction: int): void {
-        if (!agendaRange || !connected)
-            return;
-        const first = direction < 0 ? monthNumber(agendaRange.first) - 3 : monthNumber(agendaRange.end);
-        request("list", "", first, 3);
     }
 
     function eventsOn(day: date): list<var> {
@@ -127,7 +107,6 @@ Item {
                             cache[Number(year) * 12 + Number(number) - 1] = response.events;
                         }
                     }
-                    root.eventsAboutToChange();
                     root.cache = cache;
                 }
             } catch (_) {

@@ -1,15 +1,14 @@
 import QtQuick
-import QtQuick.Controls.Basic
+import qs.ControlCenter.Widgets
 import qs.Settings
 import qs.Theme
 
-ComboBox {
+ThemedComboBox {
     id: root
 
     property string caption: ""
     readonly property bool quiet: caption.length > 0
 
-    hoverEnabled: true
     implicitHeight: Settings.px(quiet ? 36 : 27)
     leftPadding: quiet ? 0 : Settings.px(9)
     rightPadding: Settings.px(19)
@@ -17,13 +16,6 @@ ComboBox {
     bottomPadding: 0
     font.family: Settings.fontFamily
     font.pixelSize: Settings.px(13)
-    palette.button: Theme.surfaceHover
-    palette.buttonText: Theme.textPrimary
-    palette.window: Theme.surface
-    palette.base: Theme.surface
-    palette.text: Theme.textPrimary
-    palette.highlight: Theme.workspaceOutline
-    palette.highlightedText: Theme.textPrimary
     popup.width: Math.max(width, Settings.px(quiet ? 260 : 112))
 
     background: Rectangle {

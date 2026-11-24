@@ -8,7 +8,7 @@ import qs.Theme
 PopupWindow {
     id: root
     color: "transparent"
-    implicitHeight: Settings.px(activeTab === ControlCenter.Calendar ? 512
+    implicitHeight: Settings.px(activeTab === ControlCenter.Calendar ? 576
         : activeTab === ControlCenter.Home ? 460 : 380)
     required property MonitorBrightness brightness
 
