@@ -28,6 +28,21 @@ paru -S ttf-material-symbols-variable-git
 
  Home also has output volume and mute, a DDC/CI brightness slider, and quick toggles for Wi-Fi, Bluetooth, Caffeine, Night Light, and Do Not Disturb. The power button cycles through the available power profiles. Caffeine inhibits Wayland idle while the bar is running. Night Light requires a running `hyprsunset`; Do Not Disturb uses Noctalia v5 notification IPC. Power profiles require `power-profiles-daemon` and `powerprofilesctl`. Controls are disabled when their backend is unavailable.
 
+ ### Calendar
+
+ Click the date or time on the right side of the bar to open the Calendar tab. Use the arrows to browse months and **Today** to jump back to the current month. Today is highlighted, and dates from adjacent months are dimmed.
+
+ #### Google Calendar (optional)
+
+ The agenda scrolls across months and groups events by day. It opens near today and loads at least 30 days back and 90 days ahead, rounded out to whole months. Scroll near either end or use **Earlier** and **Later** to load another three months. Clicking a date in the grid jumps the agenda there without filtering it. Days with events have a dot. Borderline combines the primary and checked calendars from all connected Google accounts without editing events or storing them on disk.
+
+ 1. In [Google Cloud Console](https://console.cloud.google.com/), create a project and enable the **Google Calendar API**.
+ 2. Configure the OAuth consent screen. If the app is in **Testing**, add every Google account you want to connect as a test user. Google expires refresh tokens after seven days for external apps in Testing.
+ 3. Create an OAuth client of type **Desktop app**. Download its JSON and save it as `~/.local/share/borderline-qs/google-calendar-client.json` (under `$XDG_DATA_HOME` if set). Set its permissions to `600` and do not commit it.
+ 4. Install Python 3 and `xdg-open` if needed. Reopen the Calendar tab, click **Connect Google Calendar**, and grant both read-only permissions in your browser.
+
+ Click **Add account** to sign in with another Google account using the same OAuth client. To remove just one account, select it in the dropdown and click **Disconnect**. Refresh tokens are stored next to the client JSON in `google-calendar-token.json`, with permissions `600`. To revoke an account's grant on Google's side, remove the connection in that [Google Account](https://myaccount.google.com/connections).
+
  ### Network controls
 
  Click the network icon to open the Network tab. Connect or disconnect Ethernet adapters, or turn Wi-Fi on or off and join, disconnect, or forget Wi-Fi networks. The page supports joining open and WPA-Personal networks. Enterprise profiles need to be configured separately before connecting.

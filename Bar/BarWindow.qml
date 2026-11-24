@@ -101,6 +101,15 @@ PanelWindow {
                     }
                     ClockWidget {
                         showDate: true
+
+                        Accessible.role: Accessible.Button
+                        Accessible.name: "Calendar"
+                        Accessible.onPressAction: root.toggleControlCenter(ControlCenter.Calendar)
+
+                        TapHandler {
+                            acceptedButtons: Qt.LeftButton
+                            onTapped: root.toggleControlCenter(ControlCenter.Calendar)
+                        }
                     }
                 }
 

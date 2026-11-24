@@ -1,1 +1,4 @@
 .qmlls.ini
+__pycache__/
+google-calendar-client.json
+google-calendar-token.json

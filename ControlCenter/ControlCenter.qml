@@ -8,13 +8,14 @@ import qs.Theme
 PopupWindow {
     id: root
     color: "transparent"
-    implicitHeight: Settings.px(activeTab === ControlCenter.Home ? 460 : 380)
+    implicitHeight: Settings.px(activeTab === ControlCenter.Calendar ? 512
+        : activeTab === ControlCenter.Home ? 460 : 380)
     required property MonitorBrightness brightness
 
     property bool opened: false
     property real reveal: opened ? 1 : 0
     visible: opened || reveal > 0
-    enum Tab { Home, Sound, Network, Bluetooth }
+    enum Tab { Home, Sound, Network, Bluetooth, Calendar }
     property int activeTab: ControlCenter.Home
     signal dismissRequested()
 

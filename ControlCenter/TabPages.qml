@@ -31,4 +31,8 @@ StackLayout {
         active: root.opened && root.currentIndex === ControlCenter.Bluetooth
         onDismissRequested: root.dismissRequested()
     }
+
+    CalendarPage {
+        active: root.opened && root.currentIndex === ControlCenter.Calendar
+    }
 }

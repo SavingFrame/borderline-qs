@@ -12,7 +12,7 @@ Rectangle {
 
     readonly property int inset: Settings.px(3)
     readonly property real labeledWidth: home.labeledWidth + sound.labeledWidth + network.labeledWidth
-        + bluetooth.labeledWidth + 3 * tabs.spacing + 2 * inset
+        + bluetooth.labeledWidth + calendar.labeledWidth + 4 * tabs.spacing + 2 * inset
     radius: height / 2
     color: Theme.background
     border.width: 1
@@ -61,6 +61,14 @@ Rectangle {
             text: "Bluetooth"
             selected: root.activeTab === ControlCenter.Bluetooth
             onClicked: root.tabRequested(ControlCenter.Bluetooth)
+        }
+
+        StripButton {
+            id: calendar
+            icon: "\uEBCC"
+            text: "Calendar"
+            selected: root.activeTab === ControlCenter.Calendar
+            onClicked: root.tabRequested(ControlCenter.Calendar)
         }
     }
 }
