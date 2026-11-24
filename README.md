@@ -42,6 +42,8 @@ paru -S ttf-material-symbols-variable-git
 
  Open Notifications and click **Test toast** to try a sample. DND changes in preview mode do not overwrite the live setting.
 
+ To open or close the inbox on the focused monitor from a keybinding, use `qs ipc -c borderline-qs call controlCenter toggleNotifications`.
+
  To toggle DND from a keybinding, use `qs -p /path/to/borderline-qs ipc call notifications toggleDnd` (or target your usual Quickshell config).
 
  See [the notification plan](docs/notifications-plan.md) for upcoming work.

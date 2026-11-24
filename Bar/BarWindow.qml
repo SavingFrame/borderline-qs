@@ -114,7 +114,7 @@ PanelWindow {
                         spacing: 2
                         Accessible.role: Accessible.Button
                         Accessible.name: "Notifications (" + root.notificationService.count + ")"
-                        Accessible.onPressAction: root.toggleControlCenter(ControlCenter.Notifications)
+                        Accessible.onPressAction: root.toggleNotifications()
 
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
@@ -140,7 +140,7 @@ PanelWindow {
 
                         TapHandler {
                             acceptedButtons: Qt.LeftButton
-                            onTapped: root.toggleControlCenter(ControlCenter.Notifications)
+                            onTapped: root.toggleNotifications()
                         }
                     }
                 }
@@ -186,6 +186,10 @@ PanelWindow {
         brightness: root.osdController.brightness
         notificationService: root.notificationService
         onDismissRequested: root.controlCenterOpened = false
+    }
+
+    function toggleNotifications(): void {
+        root.toggleControlCenter(ControlCenter.Notifications);
     }
 
     function toggleControlCenter(tab: int): void {
