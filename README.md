@@ -38,7 +38,7 @@ paru -S ttf-material-symbols-variable-git
  BORDERLINE_NOTIFICATIONS_PREVIEW=1 qs -p .
  ```
 
- Notification sounds are off by default. Open the gear menu in the Notifications tab and use **Sound: Off** to enable them or **Test sound** to preview the built-in chime. Playback requires `canberra-gtk-play` (provided by `libcanberra` on Arch). New toasts use the app’s local sound file or sound-theme event when available, otherwise the built-in chime. DND and the `suppress-sound` hint silence automatic playback. Explicit sound tests bypass those settings.
+ Notification sounds are off by default. Open the gear menu in the Notifications tab and use **Sound: Off** to enable them or **Test sound** to preview the built-in chime. Playback requires `canberra-gtk-play` (provided by `libcanberra` on Arch). New toasts use the app’s local sound file or sound-theme event when available, otherwise the built-in chime. DND and the `suppress-sound` hint silence automatic playback. Explicit sound tests bypass those settings. The bundled default is [Notification Sound 1 by deadrobotmusic](https://freesound.org/people/deadrobotmusic/sounds/750607/), licensed [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
  Open Notifications and click **Test toast** to try a sample. DND changes in preview mode do not overwrite the live setting.
 

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Borderline notification sound picker</title>
+<style>
+  :root { color-scheme: light dark; font: 16px/1.5 system-ui, sans-serif; }
+  body { max-width: 42rem; margin: 2.5rem auto; padding: 0 1rem; }
+  h1 { margin-bottom: .25rem; }
+  h2 { font-size: 1rem; margin: 0; }
+  p { margin: .3rem 0; }
+  .intro, .description { color: GrayText; }
+  .controls { display: flex; align-items: center; gap: .65rem; margin: 1.25rem 0; flex-wrap: wrap; }
+  ul { list-style: none; padding: 0; }
+  li { display: grid; grid-template-columns: 1fr auto; gap: .75rem; align-items: center; border-top: 1px solid color-mix(in srgb, CanvasText 18%, transparent); padding: .85rem 0; }
+  button { font: inherit; padding: .3rem .65rem; cursor: pointer; }
+  button:focus-visible, input:focus-visible { outline: 2px solid Highlight; outline-offset: 3px; }
+  #status { min-height: 1.5rem; }
+</style>
+</head>
+<body>
+<main>
+<h1>Notification sounds</h1>
+<p class="intro">Compare Borderline’s current chime with five original alternatives. Nothing plays until you click Play.</p>
+<div class="controls">
+  <label for="volume">Preview volume</label>
+  <input id="volume" type="range" min="0" max="100" value="45">
+  <button id="stop" type="button">Stop</button>
+</div>
+<ul id="sounds"></ul>
+<p id="status" role="status"></p>
+</main>
+<script>
+  // Each note: [start seconds, frequency Hz, peak gain, attack, decay, partials].
+  const presets = [
+    { name: 'Current Borderline', description: 'Notification Sound 1 by deadrobotmusic (Freesound, CC0).', file: '../Notifications/chime.wav' },
+    { name: 'Soft tick', description: 'One very short, muted tap.', notes: [[0, 365, .27, .006, .025, [1, .22, .07]]] },
+    { name: 'Glass drop', description: 'A single high note with a clean, airy tail.', notes: [[0, 880, .2, .004, .060, [1, .07, .11]]] },
+    { name: 'Wood tap', description: 'A lower, rounder sound with very little ring.', notes: [[0, 265, .28, .005, .034, [1, .13, .04]], [.003, 545, .06, .003, .012, [1]]] },
+    { name: 'Quiet double', description: 'Two soft taps, the second a little higher and quieter.', notes: [[0, 480, .21, .007, .035, [1, .07]], [.08, 590, .14, .007, .05, [1, .05]]] },
+    { name: 'Warm downstep', description: 'Two descending notes with a softer attack.', notes: [[0, 660, .2, .013, .047, [1, .08]], [.085, 550, .19, .014, .063, [1, .06]]] }
+  ];
+
+  const list = document.getElementById('sounds');
+  const volume = document.getElementById('volume');
+  const status = document.getElementById('status');
+  let context, gain, active, request = 0;
+
+  function stop() {
+    request++;
+    if (active instanceof HTMLAudioElement) active.pause();
+    else if (active) active.stop();
+    active = null;
+  }
+
+  function synthesize(notes) {
+    const rate = context.sampleRate;
+    const duration = Math.max(...notes.map(([start, , , attack, decay]) => start + attack + 6 * decay));
+    const buffer = context.createBuffer(1, Math.ceil(rate * duration), rate);
+    const samples = buffer.getChannelData(0);
+    for (const [start, frequency, peak, attack, decay, partials] of notes) {
+      const offset = Math.round(start * rate);
+      const end = Math.min(samples.length, offset + Math.ceil((attack + 6 * decay) * rate));
+      for (let i = offset; i < end; i++) {
+        const t = (i - offset) / rate;
+        const envelope = Math.min(1, t / attack) * Math.exp(-Math.max(0, t - attack) / decay)
+          * Math.min(1, (end - i) / (rate * .008));
+        const wave = partials.reduce((sum, weight, j) => sum + weight * Math.sin(2 * Math.PI * frequency * (j + 1) * t), 0);
+        samples[i] += peak * envelope * wave;
+      }
+    }
+    return buffer;
+  }
+
+  async function play(preset) {
+    stop();
+    const token = request;
+    status.textContent = 'Playing ' + preset.name + '.';
+    try {
+      if (preset.file) {
+        const audio = new Audio(preset.file);
+        active = audio;
+        audio.volume = Number(volume.value) / 100;
+        audio.addEventListener('ended', () => finished(audio, preset), { once: true });
+        await audio.play();
+      } else {
+        if (!context) {
+          context = new AudioContext();
+          gain = context.createGain();
+          gain.connect(context.destination);
+        }
+        await context.resume();
+        if (token !== request) return;
+        const source = context.createBufferSource();
+        active = source;
+        gain.gain.value = Number(volume.value) / 100;
+        source.buffer = synthesize(preset.notes);
+        source.connect(gain);
+        source.addEventListener('ended', () => { source.disconnect(); finished(source, preset); }, { once: true });
+        source.start();
+      }
+    } catch (error) {
+      if (token !== request) return;
+      active = null;
+      status.textContent = preset.file ? 'Could not play the bundled WAV. Open this page from the Borderline checkout.' : 'Could not start audio in this browser.';
+      console.warn(error);
+    }
+  }
+
+  function finished(source, preset) {
+    if (active !== source) return;
+    active = null;
+    status.textContent = 'Last played: ' + preset.name + '.';
+  }
+
+  for (const preset of presets) {
+    const row = document.createElement('li');
+    const detail = document.createElement('div');
+    const title = document.createElement('h2');
+    const description = document.createElement('p');
+    const button = document.createElement('button');
+    title.textContent = preset.name;
+    description.textContent = preset.description;
+    description.className = 'description';
+    detail.append(title, description);
+    button.textContent = 'Play';
+    button.type = 'button';
+    button.setAttribute('aria-label', 'Play ' + preset.name);
+    button.addEventListener('click', () => play(preset));
+    row.append(detail, button);
+    list.append(row);
+  }
+
+  volume.addEventListener('input', () => {
+    const value = Number(volume.value) / 100;
+    if (gain) gain.gain.value = value;
+    if (active instanceof HTMLAudioElement) active.volume = value;
+  });
+  document.getElementById('stop').addEventListener('click', () => {
+    stop();
+    status.textContent = 'Stopped.';
+  });
+</script>
+</body>
+</html>
