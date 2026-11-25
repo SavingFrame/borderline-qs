@@ -20,6 +20,7 @@ Singleton {
     readonly property string clockFormat: "HH:mm:ss"
     readonly property int iconSize: 18
     readonly property bool barVisualizerEnabled: true
+    readonly property list<string> hiddenTrayItemIds: ["blueman"]
 
     // Notifications
     readonly property int notificationToastTimeoutMs: 7000 // Used when the app requests no positive timeout.

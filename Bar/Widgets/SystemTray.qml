@@ -8,7 +8,7 @@ import qs.Theme
 
 Repeater {
     id: root
-    model: SystemTray.items
+    model: SystemTray.items.values.filter(item => !Settings.hiddenTrayItemIds.includes(item.id))
 
     MouseArea {
         id: trayItem
