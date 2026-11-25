@@ -16,8 +16,11 @@ Scope {
         for (const item of inbox) {
             const desktopEntry = (item.desktopEntry ?? "").trim().replace(/\.desktop$/i, "");
             const appName = (item.appName ?? "").trim();
-            const key = desktopEntry ? "desktop:" + desktopEntry
-                : appName ? "app:" + appName.toLowerCase() : "notification:" + item.id;
+            const title = (item.summary ?? "").trim();
+            const appKey = desktopEntry ? "desktop:" + desktopEntry
+                : appName ? "app:" + appName.toLowerCase() : "";
+            // Untitled or unidentified notifications stay separate.
+            const key = appKey && title ? JSON.stringify([appKey, title]) : "notification:" + item.id;
             if (!groups.has(key))
                 groups.set(key, []);
             groups.get(key).push(item);
@@ -33,7 +36,7 @@ Scope {
     property bool soundEnabled: false
     property var toastIds: []
     property string toastScreenName: ""
-    property int nextPreviewId: 4
+    property int nextPreviewId: 5
 
     readonly property var activeItems: {
         if (preview)
@@ -46,12 +49,14 @@ Scope {
     }
 
     property var previewItems: [
-        { id: 3, appName: "Files", appIcon: "system-file-manager", summary: "Copying photos",
+        { id: 4, appName: "Files", appIcon: "system-file-manager", summary: "Copying photos",
           body: "18 of 30 files copied", image: previewAttachment,
           hints: { value: 60 }, actions: [] },
-        { id: 2, appName: "Messages", appIcon: "internet-chat", summary: "Weekend plans",
+        { id: 3, appName: "Telegram", appIcon: "internet-chat", summary: "Alice",
           body: "Can you check if the train on Saturday still leaves at 10? We can meet by the station entrance and pick up coffee before we go.", actions: [] },
-        { id: 1, appName: "Messages", appIcon: "internet-chat", summary: "New message",
+        { id: 2, appName: "Telegram", appIcon: "internet-chat", summary: "Bob",
+          body: "Are you free on Sunday?", actions: [] },
+        { id: 1, appName: "Telegram", appIcon: "internet-chat", summary: "Alice",
           body: "I sent you the itinerary.", actions: [] }
     ]
 

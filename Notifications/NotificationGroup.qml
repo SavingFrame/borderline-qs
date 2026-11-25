@@ -57,7 +57,7 @@ ColumnLayout {
         Layout.alignment: Qt.AlignRight
         visible: root.expanded && root.olderCount > 0
         text: "Clear group"
-        Accessible.description: "Dismiss all notifications from this app"
+        Accessible.description: "Dismiss all notifications in this group"
         onClicked: root.clearRequested()
     }
 
